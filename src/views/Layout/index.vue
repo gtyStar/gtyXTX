@@ -5,14 +5,16 @@ defineOptions({
 
 import layoutNav from './components/LayoutNav.vue'
 import layoutHeader from './components/LayoutHeader.vue'
-import layoutfooter from './components/LayoutFooter.vue'
+import layoutFooter from './components/LayoutFooter.vue'
+import layoutFixed from './components/LayoutFixed.vue'
 
 
 </script>
 
 <template>
+  <layoutFixed />
   <layoutNav />
   <layoutHeader />
   <RouterView/>
-  <layoutfooter />
+  <layoutFooter />
 </template>
