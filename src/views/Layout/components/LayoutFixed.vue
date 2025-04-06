@@ -1,21 +1,11 @@
 <script setup>
-import { onMounted,ref } from 'vue';
-
 // 检测滚动的距离
 import { useScroll } from '@vueuse/core'
 const { y } = useScroll(window)
+// 使用 pinia 的数据渲染头部导航栏
+import { useCategoryStore } from '@/store/category'
+const categoryStore = useCategoryStore()
 
-// 渲染头部导航栏
-import { getCategoryAPI } from '@/apis/layout';
-const categoryList = ref([])
-const getCategory = async ()=> {
-  const res = await getCategoryAPI()
-  categoryList.value = res.result
-}
-// 在组件挂载到DOM后立即执行内部的回调函数
-onMounted(()=>{
-  getCategory()
-})
 </script>
 
 <template>
@@ -24,7 +14,7 @@ onMounted(()=>{
       <RouterLink class="logo" to="/" />
       <!-- 导航区域 -->
       <ul class="app-header-nav ">
-        <li class="home" v-for="item in categoryList" :key="item.id">
+        <li class="home" v-for="item in categoryStore.categoryList" :key="item.id">
           <RouterLink to="/">{{ item.name }}</RouterLink>
         </li>
       </ul>
