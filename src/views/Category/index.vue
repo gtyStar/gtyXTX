@@ -3,37 +3,14 @@ defineOptions({
   name: 'CategoryPage'  // 改为多单词名称
 })
 import GoodsItem from '@/views/Home/components/GoodsItem.vue'
-import { ref, onMounted, watch } from 'vue'
 // 获取分类数据 ----------------------------------------------------------------
-import { getTopCategoryAPI } from '@/apis/category'
-// 为获取当前路由参数做准备
-import { useRoute } from 'vue-router'
-const route = useRoute()
-const categoryData = ref({})
-const getCategoryData = async (id) => {
-  const res = await getTopCategoryAPI(id)
-  categoryData.value = res.result
-}
+import { useCategory } from './composables/useCategory'
+const { categoryData } = useCategory()
 
 // 获取轮播图数据 --------------------------------------------------------------
-import { getBannerAPI } from '@/apis/home'
-const bannerList = ref([])
-const getBannerList = async () => {
-  const res = await getBannerAPI('2')
-  bannerList.value = res.result
-  console.log(res);
-}
+import { useBanner } from './composables/useBanner'
+const { bannerList } = useBanner()
 
-
-// 监听路由参数变化，重新获取数据
-watch(() => route.params.id, (newValue) => {
-  getCategoryData(newValue)
-})
-
-onMounted(() => {
-  getCategoryData(route.params.id),
-  getBannerList()
-})
 </script>
 
 <template>

@@ -23,6 +23,7 @@ onMounted(()=>{
   <layoutFixed />
   <layoutNav />
   <layoutHeader />
-  <RouterView/>
+  <!-- 添加 :key="$route.fullPath"，破坏复用机制，每次路由变化都会重新渲染组件 -->
+  <RouterView />
   <layoutFooter />
 </template>
