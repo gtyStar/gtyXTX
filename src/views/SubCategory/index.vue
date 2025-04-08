@@ -1,6 +1,6 @@
 <script setup>
 defineOptions({
-  name: 'CategoryPage'  // 改为多单词名称
+  name: 'SubCategory'  // 改为多单词名称
 })
 import { ref } from 'vue'
 import GoodsItem from '@/views/Home/components/GoodsItem.vue'
