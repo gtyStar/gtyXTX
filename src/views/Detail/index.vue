@@ -2,8 +2,8 @@
 defineOptions({
   name: 'DetailPage'  // 改为多单词名称
 })
-import DetailHot from './components/DetailHot.vue'
-import ImgView from '@/components/ImageView/index.vue'
+
+
 
 import { ref, onMounted } from 'vue'
 
@@ -19,6 +19,12 @@ const getGoods = async () => {
 onMounted(() => {
   getGoods()
 })
+// 热榜商品组件---------------------------------------------------------------------------------
+import DetailHot from './components/DetailHot.vue'
+
+const skuChange = (sku) => {
+  console.log(sku)
+}
 </script>
 
 <template>
@@ -40,7 +46,7 @@ onMounted(() => {
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-              <ImgView :imageList="goods.mainPictures" />
+              <ImageView :imageList="goods.mainPictures" />
               <!-- 统计数量 -->
               <ul class="goods-sales">
                 <li>
@@ -89,7 +95,7 @@ onMounted(() => {
                 </dl>
               </div>
               <!-- sku组件 -->
-
+              <XtxSku :goods="goods" @change="skuChange" />
               <!-- 数据组件 -->
 
               <!-- 按钮组件 -->

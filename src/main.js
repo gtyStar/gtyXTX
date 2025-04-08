@@ -12,9 +12,12 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-// 引入自定义的插件-图片懒加载，并注册--------------------------------------------
+// 引入自定义的插件-图片懒加载，并注册------------------------------------------------------------
 import { lazy } from '@/directives'
 app.use(lazy)
+// 引入全局组件插件-----------------------------------------------------------------------------
+import { componentPlugin } from '@/components'
+app.use(componentPlugin)
 
 app.mount('#app')
 
@@ -39,5 +42,6 @@ app.mount('#app')
 //     )
 //   }
 // })
+
 
 
