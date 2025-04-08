@@ -32,6 +32,12 @@ const router = createRouter({
       component: Login,
     }
   ],
+  // 路由跳转的时候，滚动条会自动回到顶部
+  scrollBehavior() {
+    return {
+      top: 0,
+    }
+  }
 })
 
 export default router
