@@ -8,7 +8,6 @@ export const useBanner = () => {
   const getBannerList = async () => {
     const res = await getBannerAPI('2')
     bannerList.value = res.result
-    console.log(res);
   }
   onMounted(() => {
     getBannerList()

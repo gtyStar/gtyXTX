@@ -4,6 +4,7 @@ import { getTopCategoryAPI } from '@/apis/category'
 // 为获取当前路由参数做准备
 import { useRoute } from 'vue-router'
 
+
 export const useCategory = () => {
   const route = useRoute()
   const categoryData = ref({})
