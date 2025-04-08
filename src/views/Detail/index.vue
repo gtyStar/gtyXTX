@@ -3,6 +3,7 @@ defineOptions({
   name: 'DetailPage'  // 改为多单词名称
 })
 import DetailHot from './components/DetailHot.vue'
+import ImgView from '@/components/ImageView/index.vue'
 
 import { ref, onMounted } from 'vue'
 
@@ -14,7 +15,6 @@ const goods = ref({})
 const getGoods = async () => {
   const res = await getDetailAPI(route.params.id)
   goods.value = res.result
-  console.log(goods.value);
 }
 onMounted(() => {
   getGoods()
@@ -40,7 +40,7 @@ onMounted(() => {
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-
+              <ImgView :imageList="goods.mainPictures" />
               <!-- 统计数量 -->
               <ul class="goods-sales">
                 <li>

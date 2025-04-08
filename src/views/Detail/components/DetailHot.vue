@@ -24,8 +24,6 @@ const hotGoods = ref([])
 const getHotGoods = async () => {
   const res = await getHotGoodsAPI(route.params.id, props.type)
   hotGoods.value = res.result
-  console.log(res);
-
 }
 onMounted(() => {
   getHotGoods()
