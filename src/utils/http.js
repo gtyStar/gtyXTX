@@ -3,6 +3,7 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import { useUserStore } from '@/store/user'
+import router from '@/router'
 
 
 // 创建axios实例
@@ -30,6 +31,14 @@ http.interceptors.response.use(res => res.data, e => {
     type: 'error',
     message: e.response.data.message || '请求失败'
   })
+  // 401 token 失效处理
+  if (e.response.status === 401) {
+    // 清空用户信息
+    const userStore = useUserStore()
+    userStore.clearUserInfo()
+    // 跳转到登录页
+    router.push('/login')
+  }
   return Promise.reject(e)
 })
 
