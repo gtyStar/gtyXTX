@@ -2,15 +2,24 @@
 import '@/styles/common.scss'
 
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+
 
 
 import App from './App.vue'
-import router from './router'
+
 
 const app = createApp(App)
 
-app.use(createPinia())
+// 引入pinia状态管理插件-------------------------------------------------------------------------
+import { createPinia } from 'pinia'
+// 引入pinia持久化插件
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+const pinia = createPinia()
+// 注册pinia持久化插件
+pinia.use(piniaPluginPersistedstate)
+app.use(pinia)
+// 引入路由插件--------------------------------------------------------------------------
+import router from './router'
 app.use(router)
 // 引入自定义的插件-图片懒加载，并注册------------------------------------------------------------
 import { lazy } from '@/directives'
@@ -18,6 +27,7 @@ app.use(lazy)
 // 引入全局组件插件-----------------------------------------------------------------------------
 import { componentPlugin } from '@/components'
 app.use(componentPlugin)
+
 
 app.mount('#app')
 
