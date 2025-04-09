@@ -11,10 +11,15 @@ export const useUserStore = defineStore('user', () => {
     const res = await postLogin(account, password)
     userInfo.value = res.result
   }
+  // 清除用户数据
+  const clearUserInfo = () => {
+    userInfo.value = {}
+  }
 
   return {
     userInfo,
-    getUserInfo
+    getUserInfo,
+    clearUserInfo
   }
 },
 {
