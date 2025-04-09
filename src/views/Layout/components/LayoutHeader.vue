@@ -1,7 +1,15 @@
 <script setup>
+import HeaderCart from './HeaderCart.vue';
 // 使用 pinia 的数据渲染头部导航栏
 import { useCategoryStore } from '@/store/category'
 const categoryStore = useCategoryStore()
+import { onMounted } from 'vue'
+// 获取购物车数据------------------------------------------------------------------------------------
+import { useCartStore } from '@/store/cartStore'
+const cartStore = useCartStore()
+onMounted(() => {
+  cartStore.getCartList()
+})
 </script>
 
 <template>
@@ -21,7 +29,7 @@ const categoryStore = useCategoryStore()
         <input type="text" placeholder="搜一搜">
       </div>
       <!-- 头部购物车 -->
-
+      <HeaderCart />
     </div>
   </header>
 </template>

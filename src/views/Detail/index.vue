@@ -4,8 +4,8 @@ defineOptions({
 })
 
 
-
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { ElMessage } from 'element-plus'
 
 // 获取详情页---------------------------------------------------------------------------------
 import { getDetailAPI } from '@/apis/detail'
@@ -21,15 +21,61 @@ onMounted(() => {
 })
 // 热榜商品组件---------------------------------------------------------------------------------
 import DetailHot from './components/DetailHot.vue'
-
+// 收集商品规格信息----
+let skuObj = {}
 const skuChange = (sku) => {
   console.log(sku)
+  skuObj = sku
 }
+// count 数量框---------------------------------------------------------------------------------
+const count = ref(1)
+const countChange = (count) => {
+  count.value = count
+}
+
+// 引入购物车仓库---------------------------------------------------------------------------------
+import { useCartStore } from '@/store/cartStore'
+const cartStore = useCartStore()
+// 加入购物车---------------------------------------------------------------------------------
+const addCart = () => {
+  if (skuObj.skuId) {
+    // 加入购物车
+    cartStore.addCart({
+      id: goods.value.id, // 商品id
+      name: goods.value.name, // 商品名称
+      picture: goods.value.mainPictures[0], // 商品图片
+      price: goods.value.price, // 商品价格
+      count: count.value, // 商品数量
+      skuId: skuObj.skuId, // 规格id
+      attrsText: skuObj.specsText, // 规格文字
+      selected: true
+    })
+    ElMessage.success('加入购物车成功')
+  } else {
+    // 提示选择规格
+    ElMessage.warning('请选择规格')
+  }
+}
+
+// loading 效果---------------------------------------------------------------------------------
+import { ElLoading } from 'element-plus'
+onMounted(() => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: '正在加载中😍😍😍',
+    background: 'rgba(0, 0, 0, 0.7)',
+  })
+  watch(() => goods.value.categories, (newValue) => {
+    if (newValue) {
+      loading.close()
+    }
+  })
+})
 </script>
 
 <template>
   <div class="xtx-goods-page">
-    <div class="container" v-if="goods.categories">
+    <div class="container" v-if="goods.categories" >
       <div class="bread-container">
         <el-breadcrumb separator=">">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -97,10 +143,10 @@ const skuChange = (sku) => {
               <!-- sku组件 -->
               <XtxSku :goods="goods" @change="skuChange" />
               <!-- 数据组件 -->
-
+              <el-input-number v-model="count" @change="countChange" />
               <!-- 按钮组件 -->
               <div>
-                <el-button size="large" class="btn">
+                <el-button size="large" class="btn" @click="addCart">
                   加入购物车
                 </el-button>
               </div>
