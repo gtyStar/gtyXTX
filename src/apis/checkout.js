@@ -7,3 +7,12 @@ export const getCheckoutAPI = () => {
     url: '/member/order/pre'
   })
 }
+
+// 提交-订单
+export const creatOrderAPI = (data) => {
+  return http({
+    url: '/member/order',
+    method: 'POST',
+    data
+  })
+}

@@ -3,7 +3,9 @@ defineOptions({
   name: 'CheckoutPage'
 })
 import { ref, onMounted } from 'vue'
-import { getCheckoutAPI } from '@/apis/checkout'
+import { getCheckoutAPI, creatOrderAPI } from '@/apis/checkout'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 // 获取生成-订单(结算页)-------------------------------------------------------------------------------
 const checkInfo = ref({})  // 订单对象
@@ -30,7 +32,27 @@ const confirm = () => {
   curAddress.value = activeAddress.value
   showDialog.value = false
 }
-
+// 创建订单
+import { useCartStore } from '@/store/cartStore'
+const cartStore = useCartStore()
+const creatOrder = async () => {
+  const res = await creatOrderAPI({
+    deliveryTimeType: 1,
+    payType: 1,
+    payChannel: 1,
+    buyerMessage: '',
+    goods: checkInfo.value.goods.filter(item => item.selected === true).map(item => {
+      return {
+        skuId: item.skuId,
+        count: item.count
+      }
+    }),
+    addressId: curAddress.value.id,
+  })
+  router.push(`/pay?orderId=${res.result.id}`)
+  // 更新购物车
+  cartStore.getCartList()
+}
 
 
 </script>
@@ -127,7 +149,7 @@ const confirm = () => {
         </div>
         <!-- 提交订单 -->
         <div class="submit">
-          <el-button type="primary" size="large" >提交订单</el-button>
+          <el-button type="primary" size="large" @click="creatOrder">提交订单</el-button>
         </div>
       </div>
     </div>
@@ -355,7 +377,7 @@ const confirm = () => {
     &.active,
     &:hover {
       border-color: $xtxColor;
-      background: lighten($xtxColor, 50%);
+      // background: lighten($xtxColor, 50%);
     }
 
     >ul {

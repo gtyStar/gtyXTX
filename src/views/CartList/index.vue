@@ -2,7 +2,7 @@
 defineOptions({
   name: 'CartList'  // 改为多单词名称
 })
-import { onMounted } from 'vue'
+// import { onMounted } from 'vue'
 import { useCartStore } from '@/store/cartStore'
 const cartStore = useCartStore()
 // 更新购物车-------------------------------------------------------------------------------
@@ -15,9 +15,9 @@ const delCart = (item) => {
 }
 // 全选反选那一块-------------------------------------------------------------------------------
 // 当购物车列表中所有商品都选中时，全选框也选中
-onMounted(() => {
-  cartStore.isAllSelected()
-})
+// onMounted(() => {
+//   cartStore.isAllSelected()
+// })
 // 单选框
 const singleCheck = (index, selected) => {
   console.log(index, selected);

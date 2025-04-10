@@ -16,9 +16,9 @@ export const useCartStore = defineStore('cart', () => {
       item.loading = false
     })
     // 给购物车列表中每一项的 selected 属性值改为 false
-    // cartList.value.forEach(item => {
-    //   item.selected = false
-    // })
+    cartList.value.forEach(item => {
+      item.selected = false
+    })
   }
   // 购物车数量---------------------------------------------------------------------------------------
   const allCount = computed(() =>
@@ -45,40 +45,37 @@ export const useCartStore = defineStore('cart', () => {
   }
   // 删除购物车---------------------------------------------------------------------------------------
   const loading = ref(false)
-  const delCart = async (array) => {
+  const delCart = async ([skuId]) => {
     loading.value = true
-    await delCartAPI(array)
-    getCartList()
+    ElMessageBox.confirm(
+      '你确定要删除该商品名？',
+      '再删就没有了',
+      {
+        confirmButtonText: '删除',
+        cancelButtonText: '再想想',
+        type: 'warning',
+      }
+    )
+    .then(async () => {
+      await delCartAPI(skuId)
+      getCartList()
+      ElMessage.success('删除成功')
+    })
+    .catch(() => {
+      getCartList()
+    })
     loading.value = false
-    ElMessage.success('删除成功')
   }
   // 修改购物车---------------------------------------------------------------------------------------
   const updateCart = async (skuId, selected, count) => {
     cartList.value.find(item => item.skuId === skuId).loading = true
     if (count === 0) {
-      ElMessageBox.confirm(
-        '你确定要删除该商品名？',
-        '再删就没有了',
-        {
-          confirmButtonText: '删除',
-          cancelButtonText: '再想想',
-          type: 'warning',
-        }
-      )
-      .then(async () => {
-        ElMessage.success('删除成功')
-        await delCartAPI([skuId])
-        getCartList()
-      })
-      .catch(() => {
-        cartList.value.find(item => item.skuId === skuId).count = 1
-        cartList.value.find(item => item.skuId === skuId).loading = false
-      })
+      delCart([skuId])
     } else {
       await updateCartAPI(skuId, selected, count)
       await getCartList()
-      cartList.value.find(item => item.skuId === skuId).loading = false
     }
+    cartList.value.find(item => item.skuId === skuId).loading = false
   }
 
   // 全选反选那一块---------------------------------------------------------------------------------------
