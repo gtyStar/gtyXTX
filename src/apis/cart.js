@@ -44,3 +44,15 @@ export const delCartAPI = (array) => {
     }
   })
 }
+
+// 修改购物车
+export const updateCartAPI = (skuId, selected, count) => {
+  return http({
+    url: `/member/cart/${skuId}`,
+    method: 'put',
+    data: {
+      selected,
+      count
+    }
+  })
+}

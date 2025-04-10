@@ -63,7 +63,7 @@ onMounted(() => {
   const loading = ElLoading.service({
     lock: true,
     text: '正在加载中😍😍😍',
-    background: 'rgba(0, 0, 0, 0.7)',
+    background: 'rgba(0, 0, 0, 0.1)',
   })
   watch(() => goods.value.categories, (newValue) => {
     if (newValue) {
@@ -184,6 +184,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
+    <div class="loading" v-else></div>
   </div>
 </template>
 
@@ -361,6 +362,19 @@ onMounted(() => {
         }
       }
     }
+  }
+
+  .loading {
+    height: 600px;
+  }
+}
+
+.goods-tabs {
+  min-height: 600px;
+  background: #fff;
+
+  nav {
+    height: 70px;
   }
 }
 
