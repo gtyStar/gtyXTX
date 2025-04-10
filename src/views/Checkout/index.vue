@@ -32,7 +32,7 @@ const confirm = () => {
   curAddress.value = activeAddress.value
   showDialog.value = false
 }
-// 创建订单
+// 创建订单------------------------------------------------------------------------------------------------
 import { useCartStore } from '@/store/cartStore'
 const cartStore = useCartStore()
 const creatOrder = async () => {
@@ -41,7 +41,7 @@ const creatOrder = async () => {
     payType: 1,
     payChannel: 1,
     buyerMessage: '',
-    goods: checkInfo.value.goods.filter(item => item.selected === true).map(item => {
+    goods: checkInfo.value.goods.map(item => {
       return {
         skuId: item.skuId,
         count: item.count
@@ -49,7 +49,12 @@ const creatOrder = async () => {
     }),
     addressId: curAddress.value.id,
   })
-  router.push(`/pay?orderId=${res.result.id}`)
+  router.push({
+    path: '/pay',
+    query: {
+      id: res.result.id
+    }
+  })
   // 更新购物车
   cartStore.getCartList()
 }
