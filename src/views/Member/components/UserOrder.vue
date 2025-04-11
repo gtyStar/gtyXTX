@@ -11,26 +11,40 @@ const tabTypes = [
   { name: "complete", label: "已完成" },
   { name: "cancel", label: "已取消" }
 ]
-// 获取订单列表
+// 获取订单列表-----------------------------------------------------------------------------------------
 const orderList = ref([])
 const params = ref({
   orderState: 0,
   page: 1,
-  pageSize: 2
+  pageSize: 3
 })
 const getOrderList = async () => {
   const res = await getUserOrderAPI(params.value)
   orderList.value = res.result.items
+  total.value = res.result.counts
   console.log(res);
 }
 onMounted(() => {
   getOrderList()
 })
+// tab切换----------------------------------------------------------------------------------------------
+const tabChange = (type) => {
+  params.value.orderState = type
+  getOrderList()
+}
+// 分页-----------------------------------------------------------------------------------------------
+const total = ref(0) // 总条数
+const pageChange = (page) => {
+  params.value.page = page
+  getOrderList()
+}
+
+
 </script>
 
 <template>
   <div class="order-container">
-    <el-tabs>
+    <el-tabs @tab-change="tabChange">
       <!-- tab切换 -->
       <el-tab-pane v-for="item in tabTypes" :key="item.name" :label="item.label" />
 
@@ -108,7 +122,13 @@ onMounted(() => {
           </div>
           <!-- 分页 -->
           <div class="pagination-container">
-            <el-pagination background layout="prev, pager, next" />
+            <el-pagination
+              :total="total"
+              @current-change="pageChange"
+              :page-size="params.pageSize"
+              background
+              layout="prev, pager, next"
+            />
           </div>
         </div>
       </div>
@@ -144,8 +164,8 @@ onMounted(() => {
   border: 1px solid #f5f5f5;
 
   .head {
-    height: 50px;
-    line-height: 50px;
+    height: 40px;
+    line-height: 40px;
     background: #f5f5f5;
     padding: 0 20px;
     overflow: hidden;
@@ -183,7 +203,7 @@ onMounted(() => {
     .column {
       border-left: 1px solid #f5f5f5;
       text-align: center;
-      padding: 20px;
+      padding: 10px;
 
       >p {
         padding-top: 10px;
