@@ -1,4 +1,6 @@
 <script setup>
+import { ref, onMounted } from 'vue'
+import { getUserOrderAPI } from '@/apis/user'
 // tab列表
 const tabTypes = [
   { name: "all", label: "全部订单" },
@@ -9,9 +11,21 @@ const tabTypes = [
   { name: "complete", label: "已完成" },
   { name: "cancel", label: "已取消" }
 ]
-// 订单列表
-const orderList = []
-
+// 获取订单列表
+const orderList = ref([])
+const params = ref({
+  orderState: 0,
+  page: 1,
+  pageSize: 2
+})
+const getOrderList = async () => {
+  const res = await getUserOrderAPI(params.value)
+  orderList.value = res.result.items
+  console.log(res);
+}
+onMounted(() => {
+  getOrderList()
+})
 </script>
 
 <template>
@@ -33,7 +47,7 @@ const orderList = []
               <!-- 未付款，倒计时时间还有 -->
               <span class="down-time" v-if="order.orderState === 1">
                 <i class="iconfont icon-down-time"></i>
-                <b>付款截止: {{order.countdown}}</b>
+                <b>付款截止: {{ order.countdown }}</b>
               </span>
             </div>
             <div class="body">

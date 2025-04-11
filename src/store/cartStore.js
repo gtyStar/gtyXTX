@@ -47,30 +47,31 @@ export const useCartStore = defineStore('cart', () => {
   const loading = ref(false)
   const delCart = async ([skuId]) => {
     loading.value = true
-    ElMessageBox.confirm(
-      '你确定要删除该商品名？',
-      '再删就没有了',
-      {
-        confirmButtonText: '删除',
-        cancelButtonText: '再想想',
-        type: 'warning',
-      }
-    )
-    .then(async () => {
-      await delCartAPI(skuId)
-      getCartList()
-      ElMessage.success('删除成功')
-    })
-    .catch(() => {
-      getCartList()
-    })
+    await delCartAPI([skuId])
+    getCartList()
     loading.value = false
   }
   // 修改购物车---------------------------------------------------------------------------------------
   const updateCart = async (skuId, selected, count) => {
     cartList.value.find(item => item.skuId === skuId).loading = true
     if (count === 0) {
-      delCart([skuId])
+      ElMessageBox.confirm(
+        '你确定要删除该商品名？',
+        '再删就没有了',
+        {
+          confirmButtonText: '删除',
+          cancelButtonText: '再想想',
+          type: 'warning',
+        }
+      )
+      .then(async () => {
+        await delCartAPI([skuId])
+        getCartList()
+        ElMessage.success('删除成功')
+      })
+      .catch(() => {
+        getCartList()
+      })
     } else {
       await updateCartAPI(skuId, selected, count)
       await getCartList()

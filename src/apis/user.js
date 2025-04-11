@@ -21,3 +21,11 @@ export const getLikeListAPI = ({ limit = 4 }) => {
     }
   })
 }
+
+// 获取我的订单列表
+export const getUserOrderAPI = (params) => {
+  return http({
+    url: '/member/order',
+    params
+  })
+}
