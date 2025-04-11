@@ -11,7 +11,8 @@ const { subCategoryFilterData } = useSubFilter()
 import { useSubCategory } from './composables/useSubCategory'
 const { goodList, changeReqData, load, disabled, loading } = useSubCategory()
 // 列表筛选实现
-const sortField = ref('')
+const sortField = ref('publishTime')
+
 </script>
 
 <template>
@@ -20,7 +21,7 @@ const sortField = ref('')
     <div class="bread-container">
       <el-breadcrumb separator=">">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: `/category/${subCategoryFilterData.parentId}` }">居家
+        <el-breadcrumb-item :to="{ path: `/category/${subCategoryFilterData.parentId}` }">{{ subCategoryFilterData.parentName }}
         </el-breadcrumb-item>
         <el-breadcrumb-item>{{ subCategoryFilterData.name }}</el-breadcrumb-item>
       </el-breadcrumb>

@@ -18,11 +18,22 @@ const params = ref({
   page: 1,
   pageSize: 3
 })
+const loading = ref(true)
 const getOrderList = async () => {
+  loading.value = true
   const res = await getUserOrderAPI(params.value)
   orderList.value = res.result.items
   total.value = res.result.counts
-  console.log(res);
+  // 遍历订单列表，给每个订单添加一个倒计时时间
+  orderList.value.forEach(item => {
+    if (item.countdown === -1) {
+      item.countdown = '已超时'
+    } else {
+      start(item.countdown)
+      item.countdown = formatTime
+    }
+  })
+  loading.value = false
 }
 onMounted(() => {
   getOrderList()
@@ -39,17 +50,33 @@ const pageChange = (page) => {
   getOrderList()
 }
 // 创建格式化函数
-  const fomartPayState = (payState) => {
-    const stateMap = {
-      1: '待付款',
-      2: '待发货',
-      3: '待收货',
-      4: '待评价',
-      5: '已完成',
-      6: '已取消'
-    }
-    return stateMap[payState]
+const fomartPayState = (payState) => {
+  const stateMap = {
+    1: '待付款',
+    2: '待发货',
+    3: '待收货',
+    4: '待评价',
+    5: '已完成',
+    6: '已取消'
   }
+  return stateMap[payState]
+}
+// 立即付款-----------------------------------------------------------------------------------------------------
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const creatOrder = (id) => {
+  console.log(id)
+  router.push({
+    path: '/pay',
+    query: {
+      id
+    }
+  })
+}
+// 未付款的倒计时效果----------------------------------------------------------------------------------------------------
+import { useCountDown } from '@/composables/useCountDown'
+const { formatTime, start } = useCountDown()
+
 
 </script>
 
@@ -59,7 +86,7 @@ const pageChange = (page) => {
       <!-- tab切换 -->
       <el-tab-pane v-for="item in tabTypes" :key="item.name" :label="item.label" />
 
-      <div class="main-container">
+      <div class="main-container" v-loading="loading">
         <div class="holder-container" v-if="orderList.length === 0">
           <el-empty description="暂无订单数据" />
         </div>
@@ -70,10 +97,10 @@ const pageChange = (page) => {
               <span>下单时间：{{ order.createTime }}</span>
               <span>订单编号：{{ order.id }}</span>
               <!-- 未付款，倒计时时间还有 -->
-              <!-- <span class="down-time" v-if="order.orderState === 1">
+              <span class="down-time" v-if="order.orderState === 1">
                 <i class="iconfont icon-down-time"></i>
                 <b>付款截止: {{ order.countdown }}</b>
-              </span> -->
+              </span>
             </div>
             <div class="body">
               <div class="column goods">
@@ -96,7 +123,7 @@ const pageChange = (page) => {
                 </ul>
               </div>
               <div class="column state">
-                <p>{{ fomartPayState(order.orderState) }}</p>
+                <p>{{ order.countdown === '已超时' ? '订单已超时，但由于接口原因不能取消订单' : fomartPayState(order.orderState) }}</p>
                 <p v-if="order.orderState === 3">
                   <a href="javascript:;" class="green">查看物流</a>
                 </p>
@@ -113,16 +140,15 @@ const pageChange = (page) => {
                 <p>在线支付</p>
               </div>
               <div class="column action">
-                <el-button  v-if="order.orderState === 1" type="primary"
-                  size="small">
+                <el-button  v-if="order.orderState === 1 && order.countdown !== '已超时'" type="primary" size="small" @click="creatOrder(order.id)">
                   立即付款
                 </el-button>
                 <el-button v-if="order.orderState === 3" type="primary" size="small">
                   确认收货
                 </el-button>
-                <p><a href="javascript:;">查看详情</a></p>
+                <!-- <p><a href="javascript:;">查看详情</a></p> -->
                 <p v-if="[2, 3, 4, 5].includes(order.orderState)">
-                  <a href="javascript:;">再次购买</a>
+                  <a href="javascript:;" @click="$router.push(`/detail/${order.skus[0].spuId}`)">再次购买</a>
                 </p>
                 <p v-if="[4, 5].includes(order.orderState)">
                   <a href="javascript:;">申请售后</a>
@@ -143,7 +169,6 @@ const pageChange = (page) => {
           </div>
         </div>
       </div>
-
     </el-tabs>
   </div>
 

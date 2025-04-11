@@ -71,6 +71,17 @@ onMounted(() => {
     }
   })
 })
+
+// 使用watch监听路由参数变化---------------------------------------------------------------------------------
+watch(() => route.params.id, async (newId) => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: '正在加载中😍😍😍',
+    background: 'rgba(0, 0, 0, 0.1)',
+  })
+  await getGoods(newId)
+  loading.close()
+})
 </script>
 
 <template>

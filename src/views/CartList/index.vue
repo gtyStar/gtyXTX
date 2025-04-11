@@ -28,7 +28,21 @@ const allCheck = (selected) => {
   console.log(selected);
   cartStore.allCheck()
 }
+// 下单结算按钮
+import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+const $router = useRouter()
+const buy = () => {
+  if(cartStore.cartList.find((i) => i.selected === true)) {
+    $router.push('/checkout')
+  } else {
+    ElMessage({
+      message: '您还未选择选择商品',
+      type: 'warning'
+    })
+  }
 
+}
 </script>
 
 <template>
@@ -94,7 +108,7 @@ const allCheck = (selected) => {
             <span class="red">¥ {{ cartStore.selectedPrice.toFixed() }} </span>
           </div>
           <div class="total">
-            <el-button size="large" type="primary" @click="$router.push('/checkout')">下单结算</el-button>
+            <el-button size="large" type="primary" @click="buy">下单结算</el-button>
           </div>
         </div>
       </div>
@@ -105,7 +119,7 @@ const allCheck = (selected) => {
               <td colspan="6">
                 <div class="cart-none">
                   <el-empty description="购物车列表为空">
-                    <el-button type="primary">随便逛逛</el-button>
+                    <el-button type="primary" @click="$router.push('/')">随便逛逛</el-button>
                   </el-empty>
                 </div>
               </td>

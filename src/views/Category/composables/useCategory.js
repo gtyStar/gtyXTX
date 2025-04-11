@@ -19,7 +19,7 @@ export const useCategory = () => {
   //    ①使用 watch 监听
   //    ②使用 onBeforeRouteUpdate((to) => {}) 路由更新守卫， to 是新路由参数
   // 监听路由参数变化，重新获取数据
-  watch(() => route.params.id, (newValue) => {
+  watch(() => route.params.id,  (newValue) => {
     getCategoryData(newValue)
   })
 

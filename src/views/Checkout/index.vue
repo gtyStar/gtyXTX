@@ -5,20 +5,26 @@ defineOptions({
 import { ref, onMounted } from 'vue'
 import { getCheckoutAPI, creatOrderAPI } from '@/apis/checkout'
 import { useRouter } from 'vue-router'
+import { ElLoading } from 'element-plus'
 const router = useRouter()
 
 // 获取生成-订单(结算页)-------------------------------------------------------------------------------
 const checkInfo = ref({})  // 订单对象
 const curAddress = ref({})  // 默认地址对象
 const getCheckout = async () => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: '正在加载中😍😍😍',
+    background: 'rgba(0, 0, 0, 0.1)',
+  })
   const res = await getCheckoutAPI()
   checkInfo.value = res.result
+  console.log(res)
   curAddress.value = res.result.userAddresses.find(item => item.isDefault === 0)
-  console.log(res);
-  console.log(curAddress.value);
+  loading.close()
 }
 onMounted(() => {
-  getCheckout()
+    getCheckout()
 })
 // 控制弹窗打开-------------------------------------------------------------------------------------------
 const showDialog = ref(false)
@@ -32,7 +38,7 @@ const confirm = () => {
   curAddress.value = activeAddress.value
   showDialog.value = false
 }
-// 创建订单------------------------------------------------------------------------------------------------
+// 提交订单------------------------------------------------------------------------------------------------
 import { useCartStore } from '@/store/cartStore'
 const cartStore = useCartStore()
 const creatOrder = async () => {
@@ -58,7 +64,23 @@ const creatOrder = async () => {
   // 更新购物车
   cartStore.getCartList()
 }
-
+// 切换高亮-----------------------------------------------------------------------------------------------------------------------
+const switchDActive = (e) => {
+  if(e.target.tagName === 'A') {
+    // 清除原有的高亮
+    document.querySelector('.dTime .active').classList.remove('active')
+    // 给当前点击的元素添加高亮
+    e.target.classList.add('active')
+  }
+}
+const switchPActive = (e) => {
+  if(e.target.tagName === 'A') {
+    // 清除原有的高亮
+    document.querySelector('.pType .active').classList.remove('active')
+    // 给当前点击的元素添加高亮
+    e.target.classList.add('active')
+  }
+}
 
 </script>
 
@@ -118,14 +140,14 @@ const creatOrder = async () => {
         </div>
         <!-- 配送时间 -->
         <h3 class="box-title">配送时间</h3>
-        <div class="box-body">
+        <div class="box-body dTime" @click="switchDActive">
           <a class="my-btn active" href="javascript:;">不限送货时间：周一至周日</a>
           <a class="my-btn" href="javascript:;">工作日送货：周一至周五</a>
           <a class="my-btn" href="javascript:;">双休日、假日送货：周六至周日</a>
         </div>
         <!-- 支付方式 -->
         <h3 class="box-title">支付方式</h3>
-        <div class="box-body">
+        <div class="box-body pType" @click="switchPActive">
           <a class="my-btn active" href="javascript:;">在线支付</a>
           <a class="my-btn" href="javascript:;">货到付款</a>
           <span style="color:#999">货到付款需付5元手续费</span>

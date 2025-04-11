@@ -8,6 +8,8 @@ const productList = ref([])
 const getProductList = async () => {
   const res = await getProductAPI()
   productList.value = res.result
+  console.log(productList.value);
+
 }
 onMounted(() => {
   getProductList()
@@ -18,7 +20,7 @@ onMounted(() => {
   <div class="home-product">
     <HomePanel v-for="cate in productList" :title="cate.name" :key="cate.id">
       <div class="box">
-        <RouterLink class="cover" to="/">
+        <RouterLink class="cover" :to="`/category/${cate.id}`">
           <img v-img-lazy="cate.picture" />
           <strong class="label">
             <span>{{ cate.name }}馆</span>

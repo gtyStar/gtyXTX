@@ -3,6 +3,7 @@ import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { getSubCategoryFilterAPI } from '@/apis/subCategory'
 
+
 export const useSubFilter = () => {
   const route = useRoute()
   const subCategoryFilterData = ref([])
@@ -11,8 +12,8 @@ export const useSubFilter = () => {
     subCategoryFilterData.value = res.result
   }
   // 使用watch监听，当路由参数变化时，重新获取数据
-  watch(() => route.params.id, (newValue) => {
-    getSubCategoryFilter(newValue)
+  watch(() => route.params.id, async (newValue) => {
+    await getSubCategoryFilter(newValue)
   })
   onMounted(() => {
     getSubCategoryFilter(route.params.id)

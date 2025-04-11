@@ -1,11 +1,18 @@
 <script setup>
 import { onMounted, ref } from 'vue'
+import { ElLoading } from 'element-plus'
 // 获取轮播图数据
 import { getBannerAPI } from '@/apis/home.js'
 const bannerList = ref([])
 const getBannerList = async () => {
-  const res = await getBannerAPI()
+  const onLoading = ElLoading.service({
+    lock: true,
+    text: '正在加载中😍😍😍',
+    background: 'rgba(0, 0, 0, 0.1)',
+  })
+  const res = await getBannerAPI('1')
   bannerList.value = res.result
+  onLoading.close()
 }
 onMounted(() => {
   getBannerList()

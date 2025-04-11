@@ -1,6 +1,6 @@
 // 封装购物车模块
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { getCartAPI, addCartAPI, mergeCartAPI, delCartAPI, updateCartAPI } from '@/apis/cart'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -88,6 +88,12 @@ export const useCartStore = defineStore('cart', () => {
       item.selected = allCheckSelected.value
     })
   }
+  // 监听购物车，如果购物车没东西的话，全选框不选中
+  watch(cartList, () => {
+    if (cartList.value.length === 0) {
+      allCheckSelected.value = false
+    }
+  })
   // 当购物车列表中所有商品都选中时，全选框也选中(封装成一个方法)
   const isAllSelected = (() => {
     console.log(1);

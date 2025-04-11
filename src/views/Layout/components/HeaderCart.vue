@@ -12,7 +12,7 @@ const cartStore = useCartStore()
       <div v-if="cartStore.allCount">
         <div class="list" v-loading="cartStore.loading">
           <div class="item" v-for="item in cartStore.cartList" :key="item.id">
-            <RouterLink to="">
+            <RouterLink :to="`/detail/${item.id}`">
               <img v-img-lazy="item.picture" alt="" />
               <div class="center">
                 <p class="name ellipsis-2">

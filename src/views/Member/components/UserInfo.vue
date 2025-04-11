@@ -8,9 +8,11 @@ import { getLikeListAPI } from '@/apis/user'
 // 猜你喜欢----------------------------------------------------------------------------------------------
 import GoodsItem from '@/views/Home/components/GoodsItem.vue'
 const likeList = ref([])
+const loading = ref(true)
 const getLikeList = async () => {
   const res = await getLikeListAPI({ limit: 4 })
   likeList.value = res.result
+  loading.value = false
 }
 onMounted(() => {
   getLikeList()
@@ -18,36 +20,38 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="home-overview">
-    <!-- 用户信息 -->
-    <div class="user-meta">
-      <div class="avatar">
-        <img :src="userStore.userInfo?.avatar" />
+  <div v-loading="loading">
+    <div class="home-overview">
+      <!-- 用户信息 -->
+      <div class="user-meta">
+        <div class="avatar">
+          <img :src="userStore.userInfo?.avatar" />
+        </div>
+        <h4>{{ userStore.userInfo?.account }}</h4>
       </div>
-      <h4>{{ userStore.userInfo?.account }}</h4>
-    </div>
-    <div class="item">
-      <a href="javascript:;">
-        <span class="iconfont icon-hy"></span>
-        <p>会员中心</p>
-      </a>
-      <a href="javascript:;">
-        <span class="iconfont icon-aq"></span>
-        <p>安全设置</p>
-      </a>
-      <a href="javascript:;">
-        <span class="iconfont icon-dw"></span>
-        <p>地址管理</p>
-      </a>
-    </div>
-  </div>
-  <div class="like-container">
-    <div class="home-panel">
-      <div class="header">
-        <h4 data-v-bcb266e0="">猜你喜欢</h4>
+      <div class="item">
+        <a href="javascript:;">
+          <span class="iconfont icon-hy"></span>
+          <p>会员中心</p>
+        </a>
+        <a href="javascript:;">
+          <span class="iconfont icon-aq"></span>
+          <p>安全设置</p>
+        </a>
+        <a href="javascript:;">
+          <span class="iconfont icon-dw"></span>
+          <p>地址管理</p>
+        </a>
       </div>
-      <div class="goods-list">
-        <GoodsItem v-for="good in likeList" :key="good.id" :goods="good" />
+    </div>
+    <div class="like-container">
+      <div class="home-panel">
+        <div class="header">
+          <h4 data-v-bcb266e0="">猜你喜欢</h4>
+        </div>
+        <div class="goods-list">
+          <GoodsItem v-for="good in likeList" :key="good.id" :goods="good" />
+        </div>
       </div>
     </div>
   </div>

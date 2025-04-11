@@ -31,6 +31,7 @@ http.interceptors.response.use(res => res.data, e => {
     type: 'error',
     message: e.response.data.message || '请求失败'
   })
+  if (e.response.data.message === "无有效商品") router.push('/')
   // 401 token 失效处理
   if (e.response.status === 401) {
     // 清空用户信息

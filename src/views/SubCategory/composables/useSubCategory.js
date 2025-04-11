@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { getSubCategoryAPI } from '@/apis/subCategory'
+import { ElLoading } from 'element-plus'
 
 
 export const useSubCategory = () => {
@@ -15,12 +16,20 @@ export const useSubCategory = () => {
   })
   // 获取商品列表
   const getGoodList = async () => {
+    const onLoading = ElLoading.service({
+      lock: true,
+      text: '正在加载中😍😍😍',
+      background: 'rgba(0, 0, 0, 0.1)',
+    })
     const res = await getSubCategoryAPI(reqData.value)
     goodList.value = res.result.items
+    onLoading.close()
   }
 
   // 定义修改传入的数据的方法
   const changeReqData = (sortField) => {
+    console.log(sortField);
+
     reqData.value.sortField = sortField
     reqData.value.page = 1
     getGoodList()
