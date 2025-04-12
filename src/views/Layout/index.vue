@@ -23,6 +23,23 @@ onMounted(async ()=>{
   await categoryStore.getCategory()
   loading.close()
 })
+// 判断路由参数是否包含page参数，如果包含，提示用户：页面不存在，已自动跳转到首页
+import { useRoute } from 'vue-router'
+const route = useRoute()
+import { ElMessage } from 'element-plus'
+onMounted(()=>{
+  console.log(route.query.page)
+  if(route.query.page === '无效地址'){
+    ElMessage({
+      message: '页面不存在，已自动跳转到首页',
+      type: 'warning',
+      duration: 2000
+    })
+    // 清空路由参数
+    window.history.replaceState({}, '', '/')
+  }
+})
+
 
 
 </script>

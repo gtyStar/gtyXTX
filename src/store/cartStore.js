@@ -10,6 +10,7 @@ export const useCartStore = defineStore('cart', () => {
   // 获取购物车列表---------------------------------------------------------------------------------------
   const getCartList = async () => {
     const res = await getCartAPI()
+    if(!res.result) return
     cartList.value = res.result
     // 给购物车列表中每一项都添加一个loading属性，值为false
     cartList.value.forEach(item => {

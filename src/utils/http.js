@@ -26,11 +26,19 @@ http.interceptors.request.use(config => {
 
 // axios响应式拦截器
 http.interceptors.response.use(res => res.data, e => {
+  const path = ['/pay', '/paycallback', '/checkout']
   // 统一错误提示
+  // 如果 path 中包括当前路由，并且错误码是 401，则直接 return
+
+  if (!path.includes(window.location.pathname) && e.response.status === 401) {
+    return
+  }
   ElMessage({
     type: 'error',
     message: e.response.data.message || '请求失败'
   })
+  console.log(1);
+
   if (e.response.data.message === "无有效商品") router.push('/')
   // 401 token 失效处理
   if (e.response.status === 401) {
@@ -38,7 +46,7 @@ http.interceptors.response.use(res => res.data, e => {
     const userStore = useUserStore()
     userStore.clearUserInfo()
     // 跳转到登录页
-    router.push('/login')
+    if (path.includes(window.location.pathname)) router.push('/login')
   }
   return Promise.reject(e)
 })
