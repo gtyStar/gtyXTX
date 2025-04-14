@@ -37,7 +37,33 @@ const countChange = (count) => {
 import { useCartStore } from '@/store/cartStore'
 const cartStore = useCartStore()
 // 加入购物车---------------------------------------------------------------------------------
+import { ElMessageBox } from 'element-plus'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const addCart = () => {
+  if (JSON.parse(localStorage.getItem('user')).token) {
+    ElMessageBox.confirm(
+        '要去登录吗',
+        '您还没有登录呢',
+        {
+          confirmButtonText: '去登录',
+          cancelButtonText: '再逛逛',
+          type: 'warning',
+        }
+      )
+      .then( () => {
+        router.push({
+          path: '/login',
+          query: {
+            path: route.fullPath
+          }
+        })
+      })
+      .catch(() => {
+        return
+      })
+    return
+  }
   if (skuObj.skuId) {
     // 加入购物车
     cartStore.addCart({

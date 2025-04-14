@@ -16,3 +16,42 @@ export const creatOrderAPI = (data) => {
     data
   })
 }
+
+// 删除地址
+export const delAddressAPI = (id) => {
+  return http({
+    url: `/member/address/${id}`,
+    method: 'DELETE'
+  })
+}
+
+// 根据地区获取邮编
+// import axios from 'axios'
+// export const getCodeAPI = (area) => {
+//   return axios.get('https://sapi.k780.com', {
+//     params: area
+//   },{
+//       header: {
+//         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+//       }
+//     }
+//   )
+// }
+
+// 添加地址
+export const addAddressAPI = (data) => {
+  return http({
+    url: '/member/address',
+    method: 'POST',
+    data
+  })
+}
+
+// 修改地址
+export const editAddressAPI = (id, data) => {
+  return http({
+    url: `/member/address/${id}`,
+    method: 'PUT',
+    data
+  })
+}

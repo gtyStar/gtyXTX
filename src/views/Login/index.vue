@@ -24,7 +24,7 @@ const rules = {
   // 特殊校验，自定义校验规则
   agree: [
     {
-      validator: (rule, val, callback) => {
+      validator: (val, callback) => {
         return val ? callback() : new Error('请先同意协议')
       }
     }
@@ -40,23 +40,30 @@ const router = useRouter()
 // 引入 element-plus 的消息提示组件
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
+import { useRoute } from 'vue-router'
+const route = useRoute()
 
 const login = () => {
   // 调用实例方法
   formRef.value.validate(async (valid) => {
     // valid 是布尔值，true 表示校验通过，false 表示校验失败
     if (valid) {
-      userStore.getUserInfo(form.value.account, form.value.password)
+      await userStore.getUserInfo(form.value.account, form.value.password)
       // 提示用户
       ElMessage({
         message: '登录成功',
         type: 'success'
       })
-      // 跳转到首页
-      router.replace('/')
+      if (route.query.path) {
+        router.replace(`${route.query.path}`)
+      } else {
+        // 跳转到首页
+        router.replace('/')
+      }
     }
   })
 }
+
 </script>
 
 <template>

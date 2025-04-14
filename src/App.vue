@@ -2,9 +2,7 @@
 </script>
 
 <template>
-  <KeepAlive>
-    <router-view></router-view>
-  </KeepAlive>
+  <router-view></router-view>
 </template>
 
 <style scoped lang="scss">

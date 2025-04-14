@@ -8,12 +8,12 @@ import layoutHeader from './components/LayoutHeader.vue'
 import layoutFooter from './components/LayoutFooter.vue'
 import layoutFixed from './components/LayoutFixed.vue'
 
-// 触发仓库里的 获取导航列表事件
+// 触发仓库里的 获取导航列表事件----------------------------------------------------------------------------------
 import { useCategoryStore } from '@/store/category'
 import { onMounted } from 'vue'
 import { ElLoading } from 'element-plus'
 const categoryStore = useCategoryStore()
-// 在组件挂载到DOM后立即执行内部的回调函数
+// 在组件挂载到DOM后立即执行内部的回调函数-------------------------------------------------------------------------------
 onMounted(async ()=>{
   const loading = ElLoading.service({
     lock: true,
@@ -23,7 +23,7 @@ onMounted(async ()=>{
   await categoryStore.getCategory()
   loading.close()
 })
-// 判断路由参数是否包含page参数，如果包含，提示用户：页面不存在，已自动跳转到首页
+// 判断路由参数是否包含page参数，如果包含，提示用户：页面不存在，已自动跳转到首页--------------------------------------------------------------
 import { useRoute } from 'vue-router'
 const route = useRoute()
 import { ElMessage } from 'element-plus'
