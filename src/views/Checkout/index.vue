@@ -20,7 +20,15 @@ const getCheckout = async () => {
     background: 'rgba(0, 0, 0, 0.1)',
   })
   const res = await getCheckoutAPI()
+  console.log(res.result);
+
+  // 给 res.ressult.userAddresses倒过来
+  const reverseUserAddresses = []
+  for(let i = res.result.userAddresses.length - 1; i >= 0; i--) {
+    reverseUserAddresses.push(res.result.userAddresses[i])
+  }
   checkInfo.value = res.result
+  checkInfo.value.userAddresses = reverseUserAddresses
   // 遍历地址列表，给默认的地址添加 isShow: true 属性
   checkInfo.value.userAddresses.forEach(item => {
     if(item.isDefault === 0) {
@@ -29,7 +37,6 @@ const getCheckout = async () => {
       item.isShow = false
     }
   })
-  console.log(checkInfo.value)
   // 判断是否有地址
   if( checkInfo.value.userAddresses.length === 0 ) {
     isUserAddresses.value = false
@@ -97,7 +104,6 @@ const switchPActive = (e) => {
     e.target.classList.add('active')
   }
 }
-
 // 删除地址-----------------------------------------------------------------------------------------------------------------------
 const delAddress = async (id) => {
   ElMessageBox.confirm('确定要删除该地址吗？', '温馨提示', {
@@ -164,7 +170,6 @@ watch(() => addressForm.value.address1, (newVal) => {
       })
     }
   })
-  console.log(code.value[0], code.value[1], code.value[2]);
 })
 // 遍历表单数据重新生成API接口需要的参数
 import { computed } from 'vue'
@@ -238,13 +243,15 @@ const setDefault = async (item) => {
   console.log(res);
 }
 // 2. 修改地址按钮-修改地址-----------------------------------------------------------------------------------------------------------------------
-const drawer = ref(false)
-const editData = ref({})
-const deawerArea = ref([])
+const drawer = ref(false) // 控制抽屉的显示
+const editData = ref({})    // 绑定抽屉里的数据，动态数据
+const deawerArea = ref([])  // 抽屉里的省市区
+const judgeItem = ref({})   // 把item赋值给他，作为判断静态数据
 const onEdit = (item) => {
   drawer.value = true // 显示抽屉
-  // console.log(item)
+  console.log(item)
   editData.value = {...item }
+  judgeItem.value = {...item }
   const area = []
   regionData.map(item0 => {
     if(item0.value === editData.value.provinceCode){
@@ -266,10 +273,27 @@ const onEdit = (item) => {
     deawerArea.value = area
   })
 }
-// 3. 抽屉里的提交按钮----------------------------------------------------------------------------------------------------------
-
+// 3. 监听 deawerArea.value 的变化, 动态改变 editData.value 的 省市区的编码------------------------------------------------------------------------------------
+watch(() => deawerArea.value, (newVal) => {
+  regionData.map(item => {
+    if(item.label === newVal[0]) {
+      editData.value.provinceCode = item.value
+      item.children.map(item1 => {
+        if(item1.label === newVal[1]) {
+          editData.value.cityCode = item1.value
+          item1.children.map(item2 => {
+            if(item2.label === newVal[2]) {
+              editData.value.countyCode = item2.value
+            }
+          })
+        }
+      })
+    }
+  })
+})
+// 3. 抽屉里的提交按钮-------------------------------------------------------------------------------------------------------------------------------------
 const submitEdit = async () => {
-  const submitData = {
+  const submitData = {  // 提交的数据
     receiver: editData.value.receiver, // 收货人姓名
     contact: editData.value.contact, // 联系方式
     provinceCode: editData.value.provinceCode, // 省编码
@@ -280,9 +304,40 @@ const submitEdit = async () => {
     addressTags: editData.value.addressTags, // 地址标签
     isDefault: editData.value.isShow ? 0 : 1, // 是否设为默认地址
   }
-  const res = await editAddressAPI(editData.value.id, submitData)
-  getCheckout()
-  console.log(res);
+  // 判断是否更改了数据
+  const judge = ref(true)
+  if(
+    editData.value.address === judgeItem.value.address &&
+    editData.value.addressTags === judgeItem.value.addressTags&&
+    editData.value.cityCode === judgeItem.value.cityCode &&
+    editData.value.contact === judgeItem.value.contact &&
+    editData.value.countyCode === judgeItem.value.countyCode &&
+    editData.value.isDefault === judgeItem.value.isDefault &&
+    editData.value.isShow === judgeItem.value.isShow &&
+    editData.value.postalCode === judgeItem.value.postalCode &&
+    editData.value.provinceCode === judgeItem.value.provinceCode &&
+    editData.value.receiver === judgeItem.value.receiver
+  ) {
+    judge.value = false
+  } else{
+    judge.value = true
+  }
+  if(judge.value) {
+    const loading = ElLoading.service({
+      lock: true,
+      text: '正在加载中😍😍😍',
+      background: 'rgba(0, 0, 0, 0.1)',
+    })
+    await editAddressAPI(editData.value.id, submitData)
+    await getCheckout()
+    loading.close()
+    drawer.value = false
+    ElMessage.success('修改成功')
+  } else {
+    ElMessage.warning('请修改数据再提交')
+    return
+  }
+
 }
 
 </script>
@@ -447,6 +502,7 @@ const submitEdit = async () => {
             expandTrigger: 'hover',
           }"
           placeholder="请选择"
+          style="width: 100%;"
         />
       </el-form-item>
       <el-form-item label="详细地址" prop="address2">
@@ -492,7 +548,7 @@ const submitEdit = async () => {
         </el-form-item>
         <el-form-item label="请选择地址" prop="address1">
           <el-cascader
-            style="width: 300px;"
+            style="width: 100%;"
             v-model="deawerArea"
             :options="regionData"
             :props="{
@@ -517,7 +573,7 @@ const submitEdit = async () => {
         </el-form-item>
       </el-form>
       <div class="demo-drawer__footer" style="display: flex; justify-content: flex-end">
-        <el-button @click="Visible = false">取消</el-button>
+        <el-button @click="drawer = false">取消</el-button>
         <el-button type="primary" @click="submitEdit">提交</el-button>
       </div>
     </div>

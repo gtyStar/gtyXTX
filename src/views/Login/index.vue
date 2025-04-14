@@ -24,8 +24,8 @@ const rules = {
   // 特殊校验，自定义校验规则
   agree: [
     {
-      validator: (val, callback) => {
-        return val ? callback : new Error('请先同意协议')
+      validator: (rule, val, callback) => {
+        return val ? callback() : new Error('请先同意协议')
       }
     }
   ]

@@ -4,6 +4,7 @@ defineOptions(
     name: 'MemberPage'
   }
 )
+
 </script>
 
 <template>

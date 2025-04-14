@@ -32,7 +32,7 @@ const { formatTime, start } = useCountDown()
 // 携带订单id以及回调地址跳转到支付地址---------------------------------------------------------------------
 // 支付地址
 const baseURL = 'http://pcapi-xiaotuxian-front-devtest.itheima.net/'
-const backURL = 'http://10.32.165.141:3000/paycallback'
+const backURL = `${window.location.host}/paycallback`
 const redirectUrl = encodeURIComponent(backURL)
 const payUrl = `${baseURL}pay/aliPay?orderId=${route.query.id}&redirect=${redirectUrl}`
 </script>
