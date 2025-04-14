@@ -8,7 +8,7 @@ import router from '@/router'
 
 // 创建axios实例
 const http = axios.create({
-  baseURL: 'http://pcapi-xiaotuxian-front-devtest.itheima.net',
+  baseURL: 'https://pcapi-xiaotuxian-front-devtest.itheima.net',
   timeout: 20000
 })
 
@@ -29,7 +29,6 @@ http.interceptors.response.use(res => res.data, e => {
   const path = ['/pay', '/paycallback', '/checkout']
   // 统一错误提示
   // 如果 path 中包括当前路由，并且错误码是 401，则直接 return
-
   if (!path.includes(window.location.pathname) && e.response.status === 401) {
     return
   }

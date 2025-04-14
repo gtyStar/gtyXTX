@@ -36,12 +36,15 @@ const countChange = (count) => {
 // 引入购物车仓库---------------------------------------------------------------------------------
 import { useCartStore } from '@/store/cartStore'
 const cartStore = useCartStore()
+// 引入用户仓库token---------------------------------------------------------------------------
+import { useUserStore } from '@/store/user'
+const userStore = useUserStore()
 // 加入购物车---------------------------------------------------------------------------------
 import { ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const addCart = () => {
-  if (JSON.parse(localStorage.getItem('user')).token) {
+  if (!userStore.userInfo.token) {
     ElMessageBox.confirm(
         '要去登录吗',
         '您还没有登录呢',

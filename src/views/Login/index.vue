@@ -25,7 +25,7 @@ const rules = {
   agree: [
     {
       validator: (val, callback) => {
-        return val ? callback() : new Error('请先同意协议')
+        return val ? callback : new Error('请先同意协议')
       }
     }
   ]
