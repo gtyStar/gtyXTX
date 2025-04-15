@@ -32,6 +32,7 @@ http.interceptors.response.use(res => res.data, e => {
   if (!path.includes(window.location.pathname) && e.response.status === 401) {
     return
   }
+  if (e.response.data.message === "服务器内部错误") return
   ElMessage({
     type: 'error',
     message: e.response.data.message || '请求失败'
