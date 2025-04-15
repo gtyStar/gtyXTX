@@ -3,51 +3,27 @@ defineOptions({
   name: 'CheckoutPage'
 })
 import { ref, onMounted, watch } from 'vue'
-import { getCheckoutAPI, creatOrderAPI, delAddressAPI, addAddressAPI, editAddressAPI } from '@/apis/checkout'
+import { creatOrderAPI, delAddressAPI, addAddressAPI, editAddressAPI } from '@/apis/checkout'
 import { useRouter } from 'vue-router'
 import { ElLoading, ElMessageBox } from 'element-plus'
 const router = useRouter()
+import { useCheckoutStore } from '@/store/order'
+const checkoutStore = useCheckoutStore()
 
 // 获取生成-订单(结算页)-------------------------------------------------------------------------------
 // 定义一个有无地址的变量来决定是否显示地址列表
 const isUserAddresses = ref(true)
-const checkInfo = ref({})  // 订单对象
 const curAddress = ref({})  // 默认地址对象
-const getCheckout = async () => {
-  const loading = ElLoading.service({
-    lock: true,
-    text: '正在加载中😍😍😍',
-    background: 'rgba(0, 0, 0, 0.1)',
-  })
-  const res = await getCheckoutAPI()
-  console.log(res.result);
-
-  // 给 res.ressult.userAddresses倒过来
-  const reverseUserAddresses = []
-  for(let i = res.result.userAddresses.length - 1; i >= 0; i--) {
-    reverseUserAddresses.push(res.result.userAddresses[i])
-  }
-  checkInfo.value = res.result
-  checkInfo.value.userAddresses = reverseUserAddresses
-  // 遍历地址列表，给默认的地址添加 isShow: true 属性
-  checkInfo.value.userAddresses.forEach(item => {
-    if(item.isDefault === 0) {
-      item.isShow = true
-    } else {
-      item.isShow = false
-    }
-  })
+onMounted(async () => {
+  await checkoutStore.getCheckout()
   // 判断是否有地址
-  if( checkInfo.value.userAddresses.length === 0 ) {
+  if( checkoutStore.checkInfo.userAddresses.length === 0 ) {
     isUserAddresses.value = false
   } else {
     isUserAddresses.value = true
   }
-  curAddress.value = res.result.userAddresses.find(item => item.isDefault === 0)
-  loading.close()
-}
-onMounted(() => {
-    getCheckout()
+  // 获取默认地址
+  curAddress.value = checkoutStore.checkInfo.userAddresses.find(item => item.isDefault === 0)
 })
 // 切换地址---------------------------------------------------------------------------------------------
 // 控制弹窗打开
@@ -70,7 +46,7 @@ const creatOrder = async () => {
     payType: 1,
     payChannel: 1,
     buyerMessage: '',
-    goods: checkInfo.value.goods.map(item => {
+    goods: checkoutStore.checkInfo.goods.map(item => {
       return {
         skuId: item.skuId,
         count: item.count
@@ -113,7 +89,7 @@ const delAddress = async (id) => {
   })
   .then(async () => {
     await delAddressAPI(id)
-    getCheckout()
+    checkoutStore.getCheckout()
   })
 }
 // 添加地址-----------------------------------------------------------------------------------------------------------------------
@@ -210,10 +186,9 @@ const addAddress = async () => {
   addressFormRef.value.validate(async (valid) => {
     if(valid) {
       console.log(addressParams.value);
-
       const res = await addAddressAPI(addressParams.value)
       console.log(res);
-      getCheckout()
+      checkoutStore.getCheckout()
       // 重置表单
       resetForm()
       // 关闭弹窗
@@ -239,7 +214,7 @@ const setDefault = async (item) => {
     isDefault: 0, // 是否设为默认地址
   }
   const res = await editAddressAPI(item.id, putData)
-  getCheckout()
+  checkoutStore.getCheckout()
   console.log(res);
 }
 // 2. 修改地址按钮-修改地址-----------------------------------------------------------------------------------------------------------------------
@@ -329,7 +304,7 @@ const submitEdit = async () => {
       background: 'rgba(0, 0, 0, 0.1)',
     })
     await editAddressAPI(editData.value.id, submitData)
-    await getCheckout()
+    await checkoutStore.getCheckout()
     loading.close()
     drawer.value = false
     ElMessage.success('修改成功')
@@ -378,7 +353,7 @@ const submitEdit = async () => {
               </tr>
             </thead>
             <tbody>
-              <tr v-for="i in checkInfo.goods" :key="i.id">
+              <tr v-for="i in checkoutStore.checkInfo.goods" :key="i.id">
                 <td>
                   <a href="javascript:;" class="info">
                     <img :src="i.picture" alt="">
@@ -416,19 +391,19 @@ const submitEdit = async () => {
           <div class="total">
             <dl>
               <dt>商品件数：</dt>
-              <dd>{{ checkInfo.summary?.goodsCount }}件</dd>
+              <dd>{{ checkoutStore.checkInfo.summary?.goodsCount }}件</dd>
             </dl>
             <dl>
               <dt>商品总价：</dt>
-              <dd>¥{{ checkInfo.summary?.totalPrice.toFixed(2) }}</dd>
+              <dd>¥{{ checkoutStore.checkInfo.summary?.totalPrice.toFixed(2) }}</dd>
             </dl>
             <dl>
               <dt>运<i></i>费：</dt>
-              <dd>¥{{ checkInfo.summary?.postFee.toFixed(2) }}</dd>
+              <dd>¥{{ checkoutStore.checkInfo.summary?.postFee.toFixed(2) }}</dd>
             </dl>
             <dl>
               <dt>应付总额：</dt>
-              <dd class="price">{{ checkInfo.summary?.totalPayPrice.toFixed(2) }}</dd>
+              <dd class="price">{{ checkoutStore.checkInfo.summary?.totalPayPrice.toFixed(2) }}</dd>
             </dl>
           </div>
         </div>
@@ -442,7 +417,7 @@ const submitEdit = async () => {
   <!-- 切换地址 -->
   <el-dialog v-model="showDialog" title="切换收货地址" width="30%" center>
     <div class="addressWrapper" v-if="isUserAddresses">
-      <div class="text item" :class="activeAddress === item ? 'active' : ''" v-for="item in checkInfo.userAddresses"  :key="item.id" @click="switchAddress(item)">
+      <div class="text item" :class="activeAddress === item ? 'active' : ''" v-for="item in checkoutStore.checkInfo.userAddresses"  :key="item.id" @click="switchAddress(item)">
         <ul>
           <li><span>收<i />货<i />人：</span>{{ item.receiver }} </li>
           <li><span>联系方式：</span>{{ item.contact }}</li>
