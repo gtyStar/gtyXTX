@@ -27,9 +27,10 @@ onMounted(async ()=>{
 import { useRoute } from 'vue-router'
 const route = useRoute()
 import { ElMessage } from 'element-plus'
-onMounted(()=>{
-  console.log(route.query.page)
-  if(route.query.page === '无效地址'){
+// 监听路有变化
+import { watch } from 'vue'
+watch(()=>route.query.page, (newVal)=>{
+  if(newVal === '无效地址'){
     ElMessage({
       message: '页面不存在，已自动跳转到首页',
       type: 'warning',
@@ -39,6 +40,18 @@ onMounted(()=>{
     window.history.replaceState({}, '', '/')
   }
 })
+// onMounted(()=>{
+//   console.log(route.query.page)
+//   if(route.query.page === '无效地址'){
+//     ElMessage({
+//       message: '页面不存在，已自动跳转到首页',
+//       type: 'warning',
+//       duration: 2000
+//     })
+//     // 清空路由参数
+//     window.history.replaceState({}, '', '/')
+//   }
+// })
 
 
 
