@@ -21,6 +21,7 @@ export const useSubCategory = () => {
       text: '正在加载中😍😍😍',
       background: 'rgba(0, 0, 0, 0.1)',
     })
+    console.log(reqData.value);
     const res = await getSubCategoryAPI(reqData.value)
     goodList.value = res.result.items
     onLoading.close()
@@ -28,8 +29,6 @@ export const useSubCategory = () => {
 
   // 定义修改传入的数据的方法
   const changeReqData = (sortField) => {
-    console.log(sortField);
-
     reqData.value.sortField = sortField
     reqData.value.page = 1
     getGoodList()

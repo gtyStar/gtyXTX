@@ -124,16 +124,16 @@ const addressrules = ref({
 });
 // 获取省市区地址，与级联选择器绑定-------------------------------------------------------
 import { regionData } from "element-china-area-data";
-onMounted(() => {
-  // 遍历 regionData，在省编码后加4个0，在市编码后加2个0
-  regionData.map(item => {
-    item.value = item.value + '0000'
-    item.children.map(item1 => {
-      item1.value = item1.value + '00'
-    })
-  })
-  console.log(regionData);
-})
+// onMounted(() => {
+//   // 遍历 regionData，在省编码后加4个0，在市编码后加2个0
+//   regionData.map(item => {
+//     item.value = item.value + '0000'
+//     item.children.map(item1 => {
+//       item1.value = item1.value + '00'
+//     })
+//   })
+//   console.log(regionData);
+// })
 // 地址管理弹窗标题----------------------------------------------------------------------
 const title = ref('')
 // 点击添加地址按钮----------------------------------------------------------------------
@@ -148,10 +148,10 @@ const submitAdd = async () => {
   const code = ref([])
   regionData.map(item0 => {
     if (item0.label === formModel.value.area[0]) {
-      code.value.push(item0.value)
+      code.value.push(item0.value + '0000')
       item0.children.map(item1 => {
         if (item1.label === formModel.value.area[1]) {
-          code.value.push(item1.value)
+          code.value.push(item1.value + '00')
           item1.children.map(item2 => {
             if (item2.label === formModel.value.area[2]) {
               code.value.push(item2.value)
@@ -188,6 +188,7 @@ const submitAdd = async () => {
       // 关闭弹窗
       drawer.value = false;
       loading.close()
+      ElMessage.success('添加成功')
     } else {
       ElMessage.error('请填写完整信息')
     }
@@ -214,10 +215,10 @@ const onEdit = async (item) => {
   console.log(item);
   // 遍历 regionData，把 formModel.value 的省市区编码 转换成 名字，存到 formModel.value.area 中
   regionData.map(item0 => {
-    if (item0.value === formModel.value.provinceCode) {
+    if (item0.value + '0000' === formModel.value.provinceCode) {
       formModel.value.area.push(item0.label)
       item0.children.map(item1 => {
-        if (item1.value === formModel.value.cityCode) {
+        if (item1.value + '00' === formModel.value.cityCode) {
           formModel.value.area.push(item1.label)
           item1.children.map(item2 => {
             if (item2.value === formModel.value.countyCode) {
@@ -237,10 +238,10 @@ const submitEdit = async () => {
   const code = ref([])
   regionData.map(item0 => {
     if (item0.label === formModel.value.area[0]) {
-      code.value.push(item0.value)
+      code.value.push(item0.value + '0000')
       item0.children.map(item1 => {
         if (item1.label === formModel.value.area[1]) {
-          code.value.push(item1.value)
+          code.value.push(item1.value + '00')
           item1.children.map(item2 => {
             if (item2.label === formModel.value.area[2]) {
               code.value.push(item2.value)
@@ -293,11 +294,11 @@ const submitEdit = async () => {
         // 关闭弹窗
         drawer.value = false;
         loading.close()
+        ElMessage.success('修改成功')
       } else {
         ElMessage.error('请填写正确信息')
       }
     })
-    ElMessage.success('修改成功')
   }
 }
 // 监听 drawer 的值，当 drawer 的值为 false 时，重置表单
