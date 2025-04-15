@@ -35,8 +35,9 @@ const getOrderList = async () => {
   })
   loading.value = false
 }
-onMounted(() => {
-  getOrderList()
+onMounted(async () => {
+  await getOrderList()
+  console.log(orderList.value);
 })
 // tab切换----------------------------------------------------------------------------------------------
 const tabChange = (type) => {

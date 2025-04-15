@@ -20,6 +20,7 @@ export const useCartStore = defineStore('cart', () => {
     cartList.value.forEach(item => {
       item.selected = false
     })
+    allCheckSelected.value = false
   }
   // 购物车数量---------------------------------------------------------------------------------------
   const allCount = computed(() =>

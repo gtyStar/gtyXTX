@@ -36,8 +36,9 @@ http.interceptors.response.use(res => res.data, e => {
     type: 'error',
     message: e.response.data.message || '请求失败'
   })
-  console.log(1);
+  console.log(window.location.pathname);
 
+  // 无有效商品，跳转到首页
   if (e.response.data.message === "无有效商品") router.push('/')
   // 401 token 失效处理
   if (e.response.status === 401) {

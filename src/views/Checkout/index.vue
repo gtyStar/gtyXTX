@@ -16,6 +16,7 @@ const isUserAddresses = ref(true)
 const curAddress = ref({})  // 默认地址对象
 onMounted(async () => {
   await checkoutStore.getCheckout()
+  console.log(checkoutStore.checkInfo.goods);
   // 判断是否有地址
   if( checkoutStore.checkInfo.userAddresses.length === 0 ) {
     isUserAddresses.value = false
@@ -24,6 +25,19 @@ onMounted(async () => {
   }
   // 获取默认地址
   curAddress.value = checkoutStore.checkInfo.userAddresses.find(item => item.isDefault === 0)
+  console.log(checkoutStore.checkInfo.userAddresses);
+
+})
+// 监听地址列表的变化
+watch(() => checkoutStore.checkInfo.userAddresses, (newVal) => {
+  // 判断是否有地址
+  if (newVal.length === 0) {
+    isUserAddresses.value = false
+  } else {
+    isUserAddresses.value = true
+  }
+  // 获取默认地址
+  curAddress.value = newVal.find(item => item.isDefault === 0)
 })
 // 切换地址---------------------------------------------------------------------------------------------
 // 控制弹窗打开
@@ -95,10 +109,19 @@ const delAddress = async (id) => {
 // 添加地址-----------------------------------------------------------------------------------------------------------------------
 // 控制弹窗打开
 const Visible = ref(false);
-//编辑
+// 获得省市区数据
 import { regionData } from "element-china-area-data";
-// 省市区数据绑定到select表单
-console.log(regionData);
+onMounted(() => {
+  // 遍历 regionData，在省编码后加4个0，在市编码后加2个0
+  regionData.map(item => {
+    item.value = item.value + '0000'
+    item.children.map(item1 => {
+      item1.value = item1.value + '00'
+    })
+  })
+  console.log(regionData);
+})
+
 // 绑定表单数据
 const addressForm = ref({
   receiver: '', // 收货人姓名
@@ -164,7 +187,6 @@ const addressParams = computed(() => {
     fullLocation: addressForm.value.address1.join(' ') + addressForm.value.address2,
   }
 });
-console.log(addressParams.value);
 
 
 // 封装一个重置表单的方法
@@ -177,7 +199,7 @@ const resetForm = () => {
     postalCode: '', // 邮编
     addressTags: '', // 地址标签
     isDefault: false, // 是否设为默认地址
-  };
+  }
 }
 //确定添加地址
 import { ElMessage } from 'element-plus'
@@ -211,7 +233,7 @@ const setDefault = async (item) => {
     address: item.address, // 详细地址
     postalCode: item.postalCode, // 邮编
     addressTags: item.addressTags, // 地址标签
-    isDefault: 0, // 是否设为默认地址
+    isDefault: item.isShow ? 0 : 1, // 是否设为默认地址
   }
   const res = await editAddressAPI(item.id, putData)
   checkoutStore.getCheckout()
@@ -278,6 +300,7 @@ const submitEdit = async () => {
     postalCode: editData.value.postalCode, // 邮编
     addressTags: editData.value.addressTags, // 地址标签
     isDefault: editData.value.isShow ? 0 : 1, // 是否设为默认地址
+    fullLocation: deawerArea.value.join(' ') + editData.value.address // 完整地址
   }
   // 判断是否更改了数据
   const judge = ref(true)
@@ -308,6 +331,8 @@ const submitEdit = async () => {
     loading.close()
     drawer.value = false
     ElMessage.success('修改成功')
+    console.log(submitData);
+
   } else {
     ElMessage.warning('请修改数据再提交')
     return
@@ -474,7 +499,7 @@ const submitEdit = async () => {
           :props="{
             value: 'label',
             label: 'label',
-            expandTrigger: 'hover',
+            expandTrigger: 'click',
           }"
           placeholder="请选择"
           style="width: 100%;"

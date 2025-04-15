@@ -55,3 +55,10 @@ export const editAddressAPI = (id, data) => {
     data
   })
 }
+
+// 获取地址
+export const getAddressAPI = () => {
+  return http({
+    url: '/member/address'
+  })
+}
