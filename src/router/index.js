@@ -91,7 +91,7 @@ router.beforeEach((to) => {
   if (to.matched.length === 0) {
     // 跳转到首页
     return {
-      path: window.location.host === 'gtystar.github.io' ? '/gtyXTX/#/' : '/#/',
+      path: '/gtyXTX/#/',
       query: {
         page: '无效地址'
       }
