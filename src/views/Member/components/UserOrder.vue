@@ -124,7 +124,7 @@ const { formatTime, start } = useCountDown()
                 </ul>
               </div>
               <div class="column state">
-                <p>{{ order.countdown === '已超时' ? '订单已超时，但由于接口原因不能取消订单' : fomartPayState(order.orderState) }}</p>
+                <p>{{ order.countdown === '已超时' && order.orderState === 1 ? '订单已超时，但由于接口原因不能取消订单' : fomartPayState(order.orderState) }}</p>
                 <p v-if="order.orderState === 3">
                   <a href="javascript:;" class="green">查看物流</a>
                 </p>
@@ -148,13 +148,13 @@ const { formatTime, start } = useCountDown()
                   确认收货
                 </el-button>
                 <!-- <p><a href="javascript:;">查看详情</a></p> -->
-                <p v-if="[2, 3, 4, 5].includes(order.orderState)">
+                <p v-if="order.countdown === '已超时'">
                   <a href="javascript:;" @click="$router.push(`/detail/${order.skus[0].spuId}`)">再次购买</a>
                 </p>
                 <p v-if="[4, 5].includes(order.orderState)">
                   <a href="javascript:;">申请售后</a>
                 </p>
-                <p v-if="order.orderState === 1"><a href="javascript:;">取消订单</a></p>
+                <p v-if="order.countdown !== '已超时'"><a href="javascript:;">取消订单</a></p>
               </div>
             </div>
           </div>

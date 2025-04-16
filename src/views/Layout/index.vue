@@ -40,19 +40,20 @@ watch(()=>route.query.page, (newVal)=>{
     window.history.replaceState({}, '', '/')
   }
 })
-// onMounted(()=>{
-//   console.log(route.query.page)
-//   if(route.query.page === '无效地址'){
-//     ElMessage({
-//       message: '页面不存在，已自动跳转到首页',
-//       type: 'warning',
-//       duration: 2000
-//     })
-//     // 清空路由参数
-//     window.history.replaceState({}, '', '/')
-//   }
-// })
+onMounted(()=>{
+  console.log(window.location.host)
+  console.log(route.query.page);
+  if(route.query.page === '无效地址'){
+    ElMessage({
+      message: '页面不存在，已自动跳转到首页',
+      type: 'warning',
+      duration: 2000
+    })
+    // 清空路由参数
+    window.history.replaceState({}, '', '/')
+  }
 
+})
 
 
 </script>

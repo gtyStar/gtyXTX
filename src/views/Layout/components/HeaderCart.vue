@@ -6,7 +6,7 @@ const cartStore = useCartStore()
 <template>
   <div class="cart">
     <a class="curr" href="javascript:;">
-      <i class="iconfont icon-cart"></i><em>{{ cartStore.allCount }}</em>
+      <i class="iconfont icon-cart" ></i><em v-if="cartStore.allCount !== 0">{{ cartStore.allCount }}</em>
     </a>
     <div class="layer">
       <div v-if="cartStore.allCount">

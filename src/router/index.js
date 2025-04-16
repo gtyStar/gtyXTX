@@ -89,14 +89,13 @@ const router = createRouter({
 // 路由前置守卫
 router.beforeEach((to) => {
   if (to.matched.length === 0) {
-    // 跳转到首页
     return {
-      path: '/gtyXTX/#/',
+      // 跳转到首页
+      path: '/',
       query: {
         page: '无效地址'
       }
     }
-    // ElMessage.warning('该页面不存在')
   }
 })
 export default router

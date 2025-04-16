@@ -1,5 +1,5 @@
 // 获取基础列表数据渲染
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { getSubCategoryAPI } from '@/apis/subCategory'
 import { ElLoading } from 'element-plus'
@@ -50,7 +50,7 @@ export const useSubCategory = () => {
     }
   }
 
-  onMounted(() => getGoodList())
+  // onMounted(() => getGoodList())
 
   return {
     goodList,
@@ -58,7 +58,8 @@ export const useSubCategory = () => {
     changeReqData,
     load,
     disabled,
-    loading
+    loading,
+    getGoodList
   }
 }
 
