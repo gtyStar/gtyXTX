@@ -11,6 +11,7 @@ onMounted(() => {
   cartStore.getCartList()
 })
 // 搜索功能---------------------------------------------------------------------------------------------
+import { ElMessage } from 'element-plus'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSearchStore } from '@/store/search'
@@ -57,14 +58,21 @@ watch(() => searchModel.value, (newVal) => {
     isShowMin1.value = true
   }
 })
+
+// 搜索范围
+const searchRule = ['酒', '红酒', '白酒', '数码', '数据线', '耳机', '乐器', '吉他', '头盔']
 // 搜索
 const search = (item) => {
-  addSearchHistory(item)
-  searchModel.value = item
-  isShowPlus.value = false
-  // 跳转到 subCategoryt 页面，并携带路由参数
-  router.push(`/category/sub/${item}`)
-  searchModel.value = ''
+  if (searchRule.includes(item)) {
+    addSearchHistory(item)  // 添加搜索历史
+    searchModel.value = item
+    isShowPlus.value = false  // 隐藏搜索框下方的提示框
+    // 跳转到 subCategoryt 页面，并携带路由参数
+    router.push(`/category/sub/${item}`)
+  } else {
+    ElMessage.warning('未搜索到内容，换一个吧')
+  }
+  searchModel.value = ''  // 清空搜索框内容
 }
 const scroll = () => {
   isShowPlus.value = false

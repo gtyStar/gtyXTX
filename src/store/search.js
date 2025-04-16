@@ -418,7 +418,7 @@ export const useSearchStore = defineStore('search', () => {
     searchGoods,
     searchHistory,
     addSearchHistory,
-    delSearchHistory
+    delSearchHistory,
   }
 },
 {
