@@ -1,0 +1,1 @@
+import{z as r,l as o}from"./index-TkdKxnmQ.js";import{h as a}from"./user-C7_jzyv1.js";function s(){return a({url:"home/category/head"})}const u=r("category",()=>{const t=o([]);return{categoryList:t,getCategory:async()=>{const e=await s();t.value=e.result}}});export{u};
