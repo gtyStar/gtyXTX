@@ -5,7 +5,7 @@ defineOptions({
 
 
 import { ref, onMounted, watch } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElLoading } from 'element-plus'
 
 // 获取详情页---------------------------------------------------------------------------------
 import { getDetailAPI } from '@/apis/detail'
@@ -16,8 +16,28 @@ const getGoods = async () => {
   const res = await getDetailAPI(route.params.id)
   goods.value = res.result
 }
-onMounted(() => {
-  getGoods()
+
+onMounted(async () => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: '正在加载中😍😍😍',
+    background: 'rgba(0, 0, 0, 0.1)',
+  })
+  await getGoods()
+  loading.close()
+  console.log(goods.value);
+
+})
+
+// 使用watch监听路由参数变化---------------------------------------------------------------------------------
+watch(() => route.params.id, async (newId) => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: '正在加载中😍😍😍',
+    background: 'rgba(0, 0, 0, 0.1)',
+  })
+  await getGoods(newId)
+  loading.close()
 })
 // 热榜商品组件---------------------------------------------------------------------------------
 import DetailHot from './components/DetailHot.vue'
@@ -86,31 +106,8 @@ const addCart = () => {
   }
 }
 
-// loading 效果---------------------------------------------------------------------------------
-import { ElLoading } from 'element-plus'
-onMounted(() => {
-  const loading = ElLoading.service({
-    lock: true,
-    text: '正在加载中😍😍😍',
-    background: 'rgba(0, 0, 0, 0.1)',
-  })
-  watch(() => goods.value.categories, (newValue) => {
-    if (newValue) {
-      loading.close()
-    }
-  })
-})
 
-// 使用watch监听路由参数变化---------------------------------------------------------------------------------
-watch(() => route.params.id, async (newId) => {
-  const loading = ElLoading.service({
-    lock: true,
-    text: '正在加载中😍😍😍',
-    background: 'rgba(0, 0, 0, 0.1)',
-  })
-  await getGoods(newId)
-  loading.close()
-})
+
 </script>
 
 <template>
@@ -183,7 +180,7 @@ watch(() => route.params.id, async (newId) => {
               <!-- sku组件 -->
               <XtxSku :goods="goods" @change="skuChange" />
               <!-- 数据组件 -->
-              <el-input-number v-model="count" @change="countChange" />
+              <el-input-number min="1" v-model="count" @change="countChange" />
               <!-- 按钮组件 -->
               <div>
                 <el-button size="large" class="btn" @click="addCart">
