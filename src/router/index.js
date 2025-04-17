@@ -113,8 +113,7 @@ router.beforeEach((to) => {
   //   ElMessage.warning({
   //     message: '页面不存在，已自动返回至首页',
   //   })
-  //   window.location.href = `https://gtystar.github.io/gtyXTX/?statu=${encodeURIComponent(404)}`
-  //   // https://gtystar.github.io/gtyXTX/
+  //   window.location.href = `http://localhost:5173/?statu=${encodeURIComponent(404)}`
   //   // http://localhost:5173/
   // }
   if (to.meta.tip && !token) {
