@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=/gtyXTX",
+    "build": "vite build --base=/gty",
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "deploy": "gh-pages -d build"
