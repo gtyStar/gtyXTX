@@ -31,7 +31,7 @@ const categoryStore = useCategoryStore()
 <style scoped lang='scss'>
 .app-header-sticky {
   width: 100%;
-  height: 80px;
+  height: 90px;
   position: fixed;
   left: 0;
   top: 0;
@@ -56,8 +56,11 @@ const categoryStore = useCategoryStore()
   }
 
   .logo {
+    position: relative;
+    bottom: 15px;
+    right: 30px;
     width: 200px;
-    height: 80px;
+    height: 96px;
     background: url("@/assets/images/logo.png") no-repeat right 2px;
     background-size: 160px auto;
   }

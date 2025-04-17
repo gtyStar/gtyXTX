@@ -17,7 +17,7 @@ const confirm = () => {
       <ul>
         <!-- 登录时显示第一块，未登录时显示第二块 -->
         <template v-if="userStore.userInfo.token">
-          <li><a href="javascript:;" @click="$router.push('/')"><i class="iconfont icon-user"></i>{{ userStore.userInfo.nickname }}</a></li>
+          <li><a href="javascript:;" @click="$router.push('/')"><i class="iconfont icon-user"></i>Gty</a></li>
           <li>
             <el-popconfirm @confirm="confirm" title="确认退出吗?" confirm-button-text="确认" cancel-button-text="取消">
               <template #reference>

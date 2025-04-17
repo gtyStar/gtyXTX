@@ -202,6 +202,10 @@ watch(() => route.path, () => {
   }
 
   .logo {
+    position: relative;
+    top: -25px;
+    right: 10px;
+    height: 100px;
     width: 200px;
 
     a {
