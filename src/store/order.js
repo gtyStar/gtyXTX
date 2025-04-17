@@ -44,7 +44,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
     const res = await getAddressAPI()
     // 给 res.ressult 倒过来
     const reverseUserAddresses = []
-    for (let i = res.result.length - 1; i >= 0; i--) {
+    for (let i = res?.result?.length - 1; i >= 0; i--) {
       reverseUserAddresses.push(res.result[i])
     }
     userAddresses.value = reverseUserAddresses

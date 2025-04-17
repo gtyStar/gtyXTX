@@ -29,8 +29,8 @@ const route = useRoute()
 import { ElMessage } from 'element-plus'
 // 监听路有变化
 import { watch } from 'vue'
-watch(()=>route.query.page, (newVal)=>{
-  if(newVal === '无效地址'){
+watch(()=>route.query.statu, (newVal)=>{
+  if(newVal === '404'){
     ElMessage({
       message: '页面不存在，已自动跳转到首页',
       type: 'warning',
@@ -41,8 +41,7 @@ watch(()=>route.query.page, (newVal)=>{
   }
 })
 onMounted(()=>{
-  console.log(route.query.page);
-  if(route.query.page === '无效地址'){
+  if(route.query.statu === '404'){
     ElMessage({
       message: '页面不存在，已自动跳转到首页',
       type: 'warning',
@@ -51,7 +50,6 @@ onMounted(()=>{
     // 清空路由参数
     window.history.replaceState({}, '', '/')
   }
-
 })
 
 

@@ -41,6 +41,7 @@ const router = createRouter({
         {
           path: 'cartlist',
           component: () => import('@/views/CartList/index.vue'),
+          meta: { tip: true },
         },
         {
           path: 'checkout',
@@ -60,6 +61,7 @@ const router = createRouter({
         {
           path: 'member',
           component: () => import('@/views/Member/index.vue'),
+          meta: { tip: true },
           children: [
             {
               path: '',
@@ -79,10 +81,11 @@ const router = createRouter({
       component: () => import('@/views/Login/index.vue'),
     },
     // 如果是不存在的路径，重定向到首页
-    // {
-    //   path: '/:pathMatch(.*)*',
-    //   redirect: '/'
-    // }
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/?statu=404',
+      meta: { is404: true },
+    }
   ],
   // 路由跳转的时候，滚动条会自动回到顶部
   scrollBehavior() {
@@ -96,6 +99,7 @@ const router = createRouter({
 // from：从哪来的完整路由信息对象
 // return true  放行
 import { useUserStore } from '@/store/user'
+import { ElMessage } from 'element-plus'
 router.beforeEach((to) => {
   const userStore = useUserStore()
   const token = userStore.userInfo.token
@@ -104,14 +108,20 @@ router.beforeEach((to) => {
       name: 'login',
     }
   }
-  if (to.matched.length === 0) {
-    return {
-      // 跳转到首页
-      path: '/',
-      query: {
-        page: '无效地址'
-      }
-    }
+  // if (to.meta.is404) {
+  //   // 跳转到首页
+  //   ElMessage.warning({
+  //     message: '页面不存在，已自动返回至首页',
+  //   })
+  //   window.location.href = `https://gtystar.github.io/gtyXTX/?statu=${encodeURIComponent(404)}`
+  //   // https://gtystar.github.io/gtyXTX/
+  //   // http://localhost:5173/
+  // }
+  if (to.meta.tip && !token) {
+    ElMessage.warning({
+      message: '您还未登录',
+    })
   }
+  return true
 })
 export default router
