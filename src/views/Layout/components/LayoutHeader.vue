@@ -26,6 +26,7 @@ const searchThink = ref([]) // 搜索联想
 const loadng = ref(false)   // 联想提示框模拟loading
 // 联想算法
 watch(() => searchModel.value, (newVal) => {
+  isShowPlus.value = true
   loadng.value = true
   setTimeout(() => {
     loadng.value = false
@@ -95,10 +96,9 @@ const scroll = () => {
           <RouterLink active-class="active" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
         </li>
       </ul>
-      <div class="search" @mouseenter="isShowPlus = true">
+      <div class="search">
         <i class="iconfont icon-search"></i>
         <input type="text" placeholder="搜一搜" @focus="isShowPlus = true" @keyup.enter="search(searchModel)" v-model="searchModel">
-        <!-- @blur="isShowPlus = false" -->
         <div class="show" v-if="isShowPlus" @mouseleave="isShowPlus = false">
           <div class="history" v-if="isShow">
             <div style="height: 16px; line-height: 16px;">搜索历史</div>
@@ -230,6 +230,7 @@ const scroll = () => {
 
       .think {
         height: 200px;
+        font-size: 15px;
 
         li {
           height: 30px;
