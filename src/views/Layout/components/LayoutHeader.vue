@@ -23,8 +23,13 @@ const isShowMin1 = ref(false) // 控制搜索框联想提示框空内容的显�
 const searchModel = ref('') // 搜索框内容
 // const searchHistory = ref([]) // 搜索历史
 const searchThink = ref([]) // 搜索联想
+const loadng = ref(false)   // 联想提示框模拟loading
 // 联想算法
 watch(() => searchModel.value, (newVal) => {
+  loadng.value = true
+  setTimeout(() => {
+    loadng.value = false
+  }, 500)
   if (newVal === '') {
     isShow.value = true
   } else {
@@ -58,7 +63,6 @@ watch(() => searchModel.value, (newVal) => {
     isShowMin1.value = true
   }
 })
-
 // 搜索范围
 const searchRule = ['酒', '红酒', '白酒', '数码', '数据线', '耳机', '乐器', '吉他', '头盔']
 // 搜索
@@ -104,7 +108,7 @@ const scroll = () => {
             </div>
             <div v-if="searchHistory.length === 0" style="text-align: center;">还没有搜索记录哦😘😘~<br>去搜索吧！😁</div>
           </div>
-          <div class="think" v-else>
+          <div class="think" v-else v-loading="loadng">
             <ul>
               <li v-for="item in searchThink" :key="item" @click="search(item)">{{ item }}</li>
             </ul>

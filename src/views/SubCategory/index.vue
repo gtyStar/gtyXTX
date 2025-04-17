@@ -4,6 +4,7 @@ defineOptions({
 })
 import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { ElLoading } from 'element-plus'
 const route = useRoute()
 // 导入组件
 import GoodsItem from '@/views/Home/components/GoodsItem.vue'
@@ -51,11 +52,34 @@ const doraemon = async (id) => {
   }
 }
 
+// 定义商品是否显示变量，配合模拟 loading 效果使用
+const showGoods = ref(false)
+
 onMounted(() => {
+  showGoods.value = false
+  const onLoading = ElLoading.service({
+    lock: true,
+    text: '正在加载中😍😍😍',
+    background: 'rgba(0, 0, 0, 0.1)',
+  })
   doraemon(route.params.id)
+  setTimeout(() => {
+    onLoading.close()
+    showGoods.value = true
+  }, 500)
 })
 watch(() => route.params.id, (newVal) => {
+  showGoods.value = false
+  const onLoading = ElLoading.service({
+    lock: true,
+    text: '正在加载中😍😍😍',
+    background: 'rgba(0, 0, 0, 0.1)',
+  })
   doraemon(newVal)
+  setTimeout(() => {
+    onLoading.close()
+    showGoods.value = true
+  }, 500)
 })
 </script>
 
@@ -77,7 +101,7 @@ watch(() => route.params.id, (newVal) => {
         <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
       </el-tabs>
-      <div class="body" v-infinite-scroll="judge ? load : ''" :infinite-scroll-disabled="disabled">
+      <div class="body" v-infinite-scroll="judge ? load : ''" :infinite-scroll-disabled="disabled" v-if="showGoods">
         <!-- 商品列表-->
         <GoodsItem v-for="goods in goodsList" :key="goods.id" :goods="goods" />
       </div>
