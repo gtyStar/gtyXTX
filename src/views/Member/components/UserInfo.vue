@@ -123,17 +123,9 @@ const addressrules = ref({
   const: [{ required: false, message: "请选择是否设为默认地址", trigger: "blur" }],
 });
 // 获取省市区地址，与级联选择器绑定-------------------------------------------------------
-import { regionData } from "element-china-area-data";
-// onMounted(() => {
-//   // 遍历 regionData，在省编码后加4个0，在市编码后加2个0
-//   regionData.map(item => {
-//     item.value = item.value + '0000'
-//     item.children.map(item1 => {
-//       item1.value = item1.value + '00'
-//     })
-//   })
-//   console.log(regionData);
-// })
+// 获得省市区数据
+import { useCodeStore } from '@/store/code'
+const { regionData } = useCodeStore()
 // 地址管理弹窗标题----------------------------------------------------------------------
 const title = ref('')
 // 点击添加地址按钮----------------------------------------------------------------------
@@ -148,10 +140,10 @@ const submitAdd = async () => {
   const code = ref([])
   regionData.map(item0 => {
     if (item0.label === formModel.value.area[0]) {
-      code.value.push(item0.value + '0000')
+      code.value.push(item0.value)
       item0.children.map(item1 => {
         if (item1.label === formModel.value.area[1]) {
-          code.value.push(item1.value + '00')
+          code.value.push(item1.value)
           item1.children.map(item2 => {
             if (item2.label === formModel.value.area[2]) {
               code.value.push(item2.value)
@@ -215,10 +207,10 @@ const onEdit = async (item) => {
   console.log(item);
   // 遍历 regionData，把 formModel.value 的省市区编码 转换成 名字，存到 formModel.value.area 中
   regionData.map(item0 => {
-    if (item0.value + '0000' === formModel.value.provinceCode) {
+    if (item0.value === formModel.value.provinceCode) {
       formModel.value.area.push(item0.label)
       item0.children.map(item1 => {
-        if (item1.value + '00' === formModel.value.cityCode) {
+        if (item1.value === formModel.value.cityCode) {
           formModel.value.area.push(item1.label)
           item1.children.map(item2 => {
             if (item2.value === formModel.value.countyCode) {
@@ -238,10 +230,10 @@ const submitEdit = async () => {
   const code = ref([])
   regionData.map(item0 => {
     if (item0.label === formModel.value.area[0]) {
-      code.value.push(item0.value + '0000')
+      code.value.push(item0.value)
       item0.children.map(item1 => {
         if (item1.label === formModel.value.area[1]) {
-          code.value.push(item1.value + '00')
+          code.value.push(item1.value)
           item1.children.map(item2 => {
             if (item2.label === formModel.value.area[2]) {
               code.value.push(item2.value)

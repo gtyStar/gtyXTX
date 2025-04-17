@@ -16,7 +16,6 @@ const isUserAddresses = ref(true)
 const curAddress = ref({})  // 默认地址对象
 onMounted(async () => {
   await checkoutStore.getCheckout()
-  console.log(checkoutStore.checkInfo.goods);
   // 判断是否有地址
   if( checkoutStore.checkInfo.userAddresses.length === 0 ) {
     isUserAddresses.value = false
@@ -25,8 +24,6 @@ onMounted(async () => {
   }
   // 获取默认地址
   curAddress.value = checkoutStore.checkInfo.userAddresses.find(item => item.isDefault === 0)
-  console.log(checkoutStore.checkInfo.userAddresses);
-
 })
 // 监听地址列表的变化
 watch(() => checkoutStore.checkInfo.userAddresses, (newVal) => {
@@ -110,17 +107,9 @@ const delAddress = async (id) => {
 // 控制弹窗打开
 const Visible = ref(false);
 // 获得省市区数据
-import { regionData } from "element-china-area-data";
-// onMounted(() => {
-//   // 遍历 regionData，在省编码后加4个0，在市编码后加2个0
-//   regionData.map(item => {
-//     item.value = item.value + '0000'
-//     item.children.map(item1 => {
-//       item1.value = item1.value + '00'
-//     })
-//   })
-//   console.log(regionData);
-// })
+import { useCodeStore } from '@/store/code'
+const { regionData } = useCodeStore()
+
 
 // 绑定表单数据
 const addressForm = ref({
@@ -156,10 +145,10 @@ const code = ref([]);
 watch(() => addressForm.value.address1, (newVal) => {
   regionData.map(item => {
     if(item.label === newVal[0]){
-      code.value.push(item.value + '0000')
+      code.value.push(item.value)
       item.children.map(item1 => {
         if(item1.label === newVal[1]){
-          code.value.push(item1.value + '00')
+          code.value.push(item1.value)
           item1.children.map(item2 => {
             if(item2.label === newVal[2]){
               code.value.push(item2.value)
@@ -251,11 +240,11 @@ const onEdit = (item) => {
   judgeItem.value = {...item }
   const area = []
   regionData.map(item0 => {
-    if(item0.value + '0000' === editData.value.provinceCode){
+    if(item0.value === editData.value.provinceCode){
       console.log(item0.label);
       area.push(item0.label)
       item0.children.map(item1 => {
-        if(item1.value + '00' === editData.value.cityCode){
+        if(item1.value === editData.value.cityCode){
           console.log(item1.label);
           area.push(item1.label)
           item1.children.map(item2 => {
@@ -274,10 +263,10 @@ const onEdit = (item) => {
 watch(() => deawerArea.value, (newVal) => {
   regionData.map(item => {
     if(item.label === newVal[0]) {
-      editData.value.provinceCode = item.value + '0000'
+      editData.value.provinceCode = item.value
       item.children.map(item1 => {
         if(item1.label === newVal[1]) {
-          editData.value.cityCode = item1.value + '00'
+          editData.value.cityCode = item1.value
           item1.children.map(item2 => {
             if(item2.label === newVal[2]) {
               editData.value.countyCode = item2.value
