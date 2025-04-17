@@ -129,6 +129,25 @@ const search = (item) => {
 const scroll = () => {
   isShowPlus.value = false
 }
+
+// 判断是否有token
+import { useUserStore } from '@/store/user'
+const userStore = useUserStore()
+const isToken = ref(false)
+onMounted(() => {
+  if (userStore.userInfo.token) {
+    isToken.value = true
+  } else {
+    isToken.value = false
+  }
+})
+watch(() => route.path, () => {
+  if (userStore.userInfo.token) {
+    isToken.value = true
+  } else {
+    isToken.value = false
+  }
+})
 </script>
 
 <template>
@@ -153,7 +172,10 @@ const scroll = () => {
               <span @click="search(item)" class="itemName searchShow">{{ item }}</span>
               <i class="iconfont icon-close-new del searchShow" @click="delSearchHistory(index)"></i>
             </div>
-            <div class="searchShow" v-if="searchHistory.length === 0" style="text-align: center;">还没有搜索记录哦😘😘~<br>去搜索吧！😁</div>
+            <div class="searchShow" v-if="searchHistory.length === 0" style="text-align: center; padding-top: 10px; font-size: 14px;">
+              <div v-if="isToken">还没有搜索记录哦😘😘~<br>去搜索吧！😁</div>
+              <div v-else>不登陆就没有搜索历史哦😂😂~</div>
+            </div>
           </div>
           <div class="think searchShow" v-else v-loading="loadng">
             <ul class="searchShow">

@@ -414,11 +414,16 @@ export const useSearchStore = defineStore('search', () => {
   const delSearchHistory = (index) => {
     searchHistory.value.splice(index, 1)
   }
+  // 清空搜索历史
+  const clearSearchHistory = () => {
+    searchHistory.value = []
+  }
   return {
     searchGoods,
     searchHistory,
     addSearchHistory,
     delSearchHistory,
+    clearSearchHistory
   }
 },
 {

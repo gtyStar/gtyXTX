@@ -3,6 +3,7 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import { useUserStore } from '@/store/user'
+import { useSearchStore } from '@/store/search'
 import router from '@/router'
 
 
@@ -37,10 +38,10 @@ http.interceptors.response.use(res => res.data, e => {
     // 清空用户信息
     const userStore = useUserStore()
     userStore.clearUserInfo()
+    // 清空搜索记录
+    const searchStore = useSearchStore()
+    searchStore.clearSearchHistory()
     // 如果在 checkout, pay, paycallback, member, member/order 之外页面，不提示错误信息
-
-    console.log(window.location.href);
-
     const url = ['/checkout', '/pay', '/paycallback', '/member', '/member/order']
     if (!url.includes(window.location.pathname)) {return}
   }
