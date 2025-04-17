@@ -23,6 +23,7 @@ const router = createRouter({
       children: [
         {
           path: '',
+          name: 'home',
           component: () => import('@/views/Home/index.vue'),
         },
         {
@@ -44,14 +45,17 @@ const router = createRouter({
         {
           path: 'checkout',
           component: () => import('@/views/Checkout/index.vue'),
+          meta: { login: true },
         },
         {
           path: 'pay',
           component: () => import('@/views/Pay/index.vue'),
+          meta: { login: true },
         },
         {
           path: 'paycallback',
           component: () => import('@/views/Pay/PayBack.vue'),
+          meta: { login: true },
         },
         {
           path: 'member',
@@ -71,6 +75,7 @@ const router = createRouter({
     },
     {
       path: '/login',
+      name: 'login',
       component: () => import('@/views/Login/index.vue'),
     },
     // 如果是不存在的路径，重定向到首页
@@ -87,7 +92,18 @@ const router = createRouter({
   }
 })
 // 路由前置守卫
+// to：到哪去的完整路由信息对象（路径，参数）
+// from：从哪来的完整路由信息对象
+// return true  放行
+import { useUserStore } from '@/store/user'
 router.beforeEach((to) => {
+  const userStore = useUserStore()
+  const token = userStore.userInfo.token
+  if (to.meta.login && !token) {
+    return {
+      name: 'login',
+    }
+  }
   if (to.matched.length === 0) {
     return {
       // 跳转到首页

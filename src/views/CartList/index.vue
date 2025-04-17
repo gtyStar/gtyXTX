@@ -41,7 +41,6 @@ const buy = () => {
       type: 'warning'
     })
   }
-
 }
 </script>
 

@@ -10,6 +10,42 @@ const cartStore = useCartStore()
 onMounted(() => {
   cartStore.getCartList()
 })
+// 获取当前页面路径
+import { useRoute } from 'vue-router'
+const route = useRoute()
+import { ElLoading } from 'element-plus'
+// 如果在购物车页面，则隐藏头部购物车
+const isShowCart = ref(true)  // 控制购物车显示与隐藏
+const cartLoading = () => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: '正在加载中😍😍😍',
+    background: 'rgba(0, 0, 0, 0.1)',
+  })
+  setTimeout(() => {
+    loading.close()
+  }, 200)
+}
+onMounted(() => {
+  if (route.path === '/cartlist') {
+    isShowCart.value = false
+    cartStore.getCartList()
+    cartLoading()
+  } else {
+    isShowCart.value = true
+  }
+})
+watch(() => route.path, (newVal) => {
+  if (newVal === '/cartlist') {
+    isShowCart.value = false
+    cartStore.getCartList()
+    cartLoading()
+  } else {
+    isShowCart.value = true
+  }
+})
+
+
 // 搜索功能---------------------------------------------------------------------------------------------
 import { ElMessage } from 'element-plus'
 import { ref, watch } from 'vue'
@@ -128,7 +164,7 @@ const scroll = () => {
         </div>
       </div>
       <!-- 头部购物车 -->
-      <HeaderCart @mouseenter="isShowPlus = false" />
+      <HeaderCart @mouseenter="isShowPlus = false" v-if="isShowCart" />
     </div>
   </header>
 </template>

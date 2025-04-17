@@ -41,7 +41,6 @@ watch(()=>route.query.page, (newVal)=>{
   }
 })
 onMounted(()=>{
-  console.log(window.location.host)
   console.log(route.query.page);
   if(route.query.page === '无效地址'){
     ElMessage({

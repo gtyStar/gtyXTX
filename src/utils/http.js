@@ -6,6 +6,7 @@ import { useUserStore } from '@/store/user'
 import router from '@/router'
 
 
+
 // 创建axios实例
 const http = axios.create({
   baseURL: 'https://pcapi-xiaotuxian-front-devtest.itheima.net',
@@ -26,19 +27,12 @@ http.interceptors.request.use(config => {
 
 // axios响应式拦截器
 http.interceptors.response.use(res => res.data, e => {
-  const path = ['/pay', '/paycallback', '/checkout']
   // 统一错误提示
-  // 如果 path 中包括当前路由，并且错误码是 401，则直接 return
-  if (!path.includes(window.location.pathname) && e.response.status === 401) {
-    return
-  }
   if (e.response.data.message === "服务器内部错误") return
   ElMessage({
     type: 'error',
     message: e.response.data.message || '请求失败'
   })
-  console.log(window.location.pathname);
-
   // 无有效商品，跳转到首页
   if (e.response.data.message === "无有效商品") router.push('/')
   // 401 token 失效处理
@@ -46,10 +40,8 @@ http.interceptors.response.use(res => res.data, e => {
     // 清空用户信息
     const userStore = useUserStore()
     userStore.clearUserInfo()
-    // 跳转到登录页
-    if (path.includes(window.location.pathname)) router.push('/login')
   }
-  return Promise.reject(e)
+  // return Promise.reject(e)
 })
 
 

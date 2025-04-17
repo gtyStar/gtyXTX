@@ -4,7 +4,28 @@ defineOptions(
     name: 'MemberPage'
   }
 )
-
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+const route = useRoute()
+const router = useRouter()
+import { useUserStore } from '@/store/user';
+const userStore = useUserStore()
+const isShow = ref(true)
+onMounted(() => {
+  if(userStore.userInfo.token){
+    isShow.value = true
+  } else{
+    isShow.value = false
+  }
+})
+const login = () => {
+  router.push({
+    path: '/login',
+    query: {
+      path: route.fullPath
+    }
+  })
+}
 </script>
 
 <template>
@@ -21,10 +42,13 @@ defineOptions(
         </div>
       </div>
     </div>
-    <div class="article">
+    <div class="article" v-if="isShow">
       <!-- 三级路由的挂载点 -->
       <RouterView />
     </div>
+    <el-empty class="article" v-else style="height: 552px;" description="您还未登录">
+      <el-button type="primary" @click="login" size="large">去登录</el-button>
+    </el-empty>
   </div>
 </template>
 
