@@ -16,6 +16,9 @@ export const useCartStore = defineStore('cart', () => {
     cartList.value.forEach(item => {
       item.loading = false
     })
+  }
+  // 清空勾选框---------------------------------------------------------------------------------------
+  const clearCheck = () => {
     // 给购物车列表中每一项的 selected 属性值改为 false
     cartList.value.forEach(item => {
       item.selected = false
@@ -133,6 +136,7 @@ export const useCartStore = defineStore('cart', () => {
     isAllSelected,
     allCheck,
     selectedCount,
-    selectedPrice
+    selectedPrice,
+    clearCheck
   }
 })

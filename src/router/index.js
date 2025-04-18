@@ -108,20 +108,19 @@ router.beforeEach((to) => {
       name: 'login',
     }
   }
-  // if (to.meta.is404) {
-  //   // 跳转到首页
-  //   ElMessage.warning({
-  //     message: '页面不存在，已自动返回至首页',
-  //   })
-  //   window.location.href = `http://localhost:5173/?statu=${encodeURIComponent(404)}`
-  //   // http://localhost:5173/
-  // }
   if (to.meta.tip && !token) {
     ElMessage.warning({
       message: '您还未登录',
     })
   }
-
   return true
 })
 export default router
+// if (to.meta.is404) {
+//   // 跳转到首页
+//   ElMessage.warning({
+//     message: '页面不存在，已自动返回至首页',
+//   })
+//   window.location.href = `http://localhost:5173/?statu=${encodeURIComponent(404)}`
+//   // http://localhost:5173/
+// }

@@ -15,10 +15,6 @@ const delCart = (item) => {
   cartStore.delCart([item.skuId])
 }
 // 全选反选那一块-------------------------------------------------------------------------------
-// 当购物车列表中所有商品都选中时，全选框也选中
-// onMounted(() => {
-//   cartStore.isAllSelected()
-// })
 // 单选框
 const singleCheck = (index, selected) => {
   console.log(index, selected);
@@ -43,6 +39,24 @@ const buy = () => {
     })
   }
 }
+// 进入页面时，清空勾选框
+import { onMounted, watch, ref } from 'vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+// 定义一个显示隐藏勾选框的变量
+const showCheck = ref(false)
+onMounted(async () => {
+  showCheck.value = false
+  await cartStore.getCartList()
+  cartStore.clearCheck()
+  showCheck.value = true
+})
+watch(() => route.path, async () => {
+  showCheck.value = false
+  await cartStore.getCartList()
+  cartStore.clearCheck()
+  showCheck.value = true
+})
 </script>
 
 <template>
@@ -54,7 +68,7 @@ const buy = () => {
             <tr>
               <th width="120">
                 <!-- 全选框 -->
-                <el-checkbox :model-value="cartStore.allCheckSelected" @change="allCheck" />
+                <el-checkbox v-if="showCheck" :model-value="cartStore.allCheckSelected" @change="allCheck" />
               </th>
               <th width="400">商品信息</th>
               <th width="220">单价</th>
@@ -68,7 +82,7 @@ const buy = () => {
             <tr v-for="(i, index) in cartStore.cartList" :key="i.id">
               <td>
                 <!-- 单选框 -->
-                <el-checkbox :model-value="i.selected" @change="(selected) => singleCheck(index, selected)" />
+                <el-checkbox v-if="showCheck" :model-value="i.selected" @change="(selected) => singleCheck(index, selected)" />
               </td>
               <td>
                 <div class="goods">

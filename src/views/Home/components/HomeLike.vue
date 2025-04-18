@@ -9,12 +9,13 @@ const likeList = ref([])
 //随机获取数组中的元素
 const randomGoods = (arr) => {
   let result = [];
-  if(arr.length<4) {
+  // 如果商品库里的元素数量小于4个，则直接返回商品库整体
+  if(arr.length<4) {  // 商品列表左对齐
     document.querySelector('.goods-list').style.justifyContent = 'flex-start'
     return arr
-  } else {
+  } else {  // 商品列表均匀分布
     document.querySelector('.goods-list').style.justifyContent = 'space-between'
-    // 在数组长度的范围内生成4个不重复的随机数
+    // 抽取4个不重复的商品
     while (result.length < 4) {
       const randomIndex = Math.floor(Math.random() * arr.length);
       if (!result.includes(arr[randomIndex])) {

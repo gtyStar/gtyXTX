@@ -1,6 +1,5 @@
 // 定义懒加载插件
 import { useIntersectionObserver } from '@vueuse/core'
-
 export const lazy = {
   install(app) {
     // 定义全局指令-图片懒加载
@@ -8,7 +7,6 @@ export const lazy = {
       mounted(el, binding) {
         // el: 指令绑定的元素-img
         // binding: 指令的参数-img的地址
-
         // 使用懒加载插件
         const { stop } = useIntersectionObserver(
           el,

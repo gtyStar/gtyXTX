@@ -37,7 +37,7 @@ watch(()=>route.query.statu, (newVal)=>{
       duration: 2000
     })
     // 清空路由参数
-    window.history.replaceState({}, '', '/')
+    window.history.replaceState({}, '', '/gty/#/')
   }
 })
 onMounted(()=>{
@@ -48,7 +48,7 @@ onMounted(()=>{
       duration: 2000
     })
     // 清空路由参数
-    window.history.replaceState({}, '', '/')
+    window.history.replaceState({}, '', '/gty/#/')
   }
 })
 
