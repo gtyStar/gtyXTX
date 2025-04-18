@@ -398,7 +398,6 @@ export const useSearchStore = defineStore('search', () => {
   const searchHistory = ref([])
   // 添加搜索历史
   const addSearchHistory = (keyword) => {
-    console.log(1);
     // 遍历数组，如果搜索历史已经存在传入的关键词，如果存在则删除，再添加
     searchHistory.value.forEach((item, index) => {
       if (item === keyword) {
@@ -406,9 +405,9 @@ export const useSearchStore = defineStore('search', () => {
       }
     })
     if (searchHistory.value.length > 4) {   // 如果搜索历史超过5条，如果超过删除最后一条，再添加
-      searchHistory.value.pop()                    // pop 删除数组最后一条
+      searchHistory.value.pop()             // pop 删除数组最后一条
     }
-    searchHistory.value.unshift(keyword)           // unshift 在数组最前面添加元素
+    searchHistory.value.unshift(keyword)    // unshift 在数组最前面添加元素
   }
   // 删除搜索历史
   const delSearchHistory = (index) => {

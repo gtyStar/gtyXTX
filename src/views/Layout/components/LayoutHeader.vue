@@ -115,7 +115,9 @@ const searchRule = ['酒', '红酒', '白酒', '数码', '数据线', '耳机', 
 // 搜索
 const search = (item) => {
   if (searchRule.includes(item)) {
-    addSearchHistory(item)  // 添加搜索历史
+    if(isToken.value) {
+      addSearchHistory(item)  // 添加搜索历史
+    }
     searchModel.value = item
     isShowPlus.value = false  // 隐藏搜索框下方的提示框
     // 跳转到 subCategoryt 页面，并携带路由参数

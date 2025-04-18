@@ -1,7 +1,7 @@
 <script setup>
 // 检测滚动的距离
 import { useScroll } from '@vueuse/core'
-const { y } = useScroll(window)
+const { y } = useScroll(window) // y 就是 y轴滚动的距离
 // 使用 pinia 的数据渲染头部导航栏
 import { useCategoryStore } from '@/store/category'
 const categoryStore = useCategoryStore()
