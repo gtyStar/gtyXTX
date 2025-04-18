@@ -45,6 +45,7 @@ http.interceptors.response.use(res => res.data, e => {
     const url = ['/checkout', '/pay', '/paycallback', '/member', '/member/order']
     if (!url.includes(window.location.pathname)) {return}
   }
+  if (e.response.status === 400) router.push('/')
   // 统一错误提示
   ElMessage({
     type: 'error',

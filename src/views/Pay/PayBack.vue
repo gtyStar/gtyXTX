@@ -7,7 +7,7 @@ const orderInfo = ref({})
 
 const getOrderInfo = async () => {
   const res = await getOrderDetailAPI(route.query.orderId)
-  orderInfo.value = res.result
+  orderInfo.value = res?.result
 }
 
 

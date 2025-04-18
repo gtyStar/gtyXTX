@@ -15,10 +15,13 @@ const loading = ref(true)
 const getPayInfo = async () => {
   loading.value = true
   const res = await getOrderDetailAPI(route.query.id)
-  payInfo.value = res.result
+  payInfo.value = res?.result
+
   // 初始化倒计时
   start(res.result.countdown)
   loading.value = false
+  console.log(payInfo.value);
+
 }
 onMounted(() => {
   getPayInfo()
