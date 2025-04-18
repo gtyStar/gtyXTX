@@ -14,7 +14,7 @@ const route = useRoute()
 const goods = ref({})
 const getGoods = async () => {
   const res = await getDetailAPI(route.params.id)
-  goods.value = res.result
+  goods.value = res?.result
 }
 
 onMounted(async () => {

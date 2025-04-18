@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { getUserOrderAPI } from '@/apis/user'
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+
 // tab列表
 const tabTypes = [
   { name: "all", label: "全部订单" },
@@ -160,13 +162,16 @@ const { formatTime, start } = useCountDown()
           </div>
           <!-- 分页 -->
           <div class="pagination-container">
-            <el-pagination
-              :total="total"
-              @current-change="pageChange"
-              :page-size="params.pageSize"
-              background
-              layout="prev, pager, next"
-            />
+            <el-config-provider :locale="zhCn" >
+              <el-pagination
+                :total="total"
+                @current-change="pageChange"
+                :page-size="params.pageSize"
+                background
+                jumper-text="..."
+                layout="prev, pager, next, jumper"
+              />
+            </el-config-provider>
           </div>
         </div>
       </div>

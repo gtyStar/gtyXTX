@@ -67,7 +67,7 @@ const searchThink = ref([]) // 搜索联想
 const loadng = ref(false)   // 联想提示框模拟loading
 // 联想算法
 watch(() => searchModel.value, (newVal) => {
-  isShowPlus.value = true
+  // isShowPlus.value = true
   loadng.value = true
   setTimeout(() => {
     loadng.value = false
@@ -121,9 +121,9 @@ const search = (item) => {
     // 跳转到 subCategoryt 页面，并携带路由参数
     router.push(`/category/sub/${item}`)
   } else {
+    searchModel.value = ''  // 清空搜索框内容
     ElMessage.warning('未搜索到内容，换一个吧')
   }
-  searchModel.value = ''  // 清空搜索框内容
 }
 // 鼠标滚动时隐藏搜索框下方的提示框
 const scroll = () => {
@@ -162,9 +162,9 @@ watch(() => route.path, () => {
           <RouterLink active-class="active" :to="`/category/${item.id}`">{{ item.name }}</RouterLink>
         </li>
       </ul>
-      <div class="search searchShow" @click="isShowPlus = true">
+      <div class="search searchShow">
         <i class="iconfont icon-search searchShow"></i>
-        <input class="searchShow" type="text" placeholder="搜一搜" @keyup.enter="search(searchModel)" v-model="searchModel">
+        <input class="searchShow" type="text" placeholder="搜一搜" @click="isShowPlus = true" @keyup.enter="search(searchModel)" v-model="searchModel">
         <div class="show searchShow" v-if="isShowPlus">
           <div class="history searchShow" v-if="isShow">
             <div class="searchShow" style="height: 16px; line-height: 16px;">搜索历史</div>
@@ -252,8 +252,9 @@ watch(() => route.path, () => {
     width: 170px;
     // height: 32px;
     position: relative;
-    border-bottom: 1px solid #e7e7e7;
+    border: 2px solid #e7e7e7;
     line-height: 32px;
+    border-radius: 5px;
 
     .icon-search {
       font-size: 18px;

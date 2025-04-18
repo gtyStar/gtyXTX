@@ -67,7 +67,7 @@ onMounted(() => {
 })
 </script>
 <template>
-  <HomePanel title="猜你喜欢" sub-title="根据您最新一次搜索生成">
+  <HomePanel title="猜你喜欢" sub-title="根据您最近一次搜索生成">
       <ul class="goods-list">
         <li v-for="item in likeList" :key="item.id">
           <RouterLink :to="`/detail/${item.id}`">

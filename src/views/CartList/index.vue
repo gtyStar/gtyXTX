@@ -117,8 +117,8 @@ const buy = () => {
             <tr>
               <td colspan="6">
                 <div class="cart-none">
-                  <el-empty description="购物车列表为空">
-                    <el-button type="primary" @click="$router.push('/')">随便逛逛</el-button>
+                  <el-empty description="购物车列表为空" style="height: 500px;">
+                    <el-button size="large" type="primary" @click="$router.push('/')">随便逛逛</el-button>
                   </el-empty>
                 </div>
               </td>

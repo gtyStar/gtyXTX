@@ -309,16 +309,16 @@ watch(() => drawer.value, (newVal) => {
         <div class="avatar">
           <img :src="userStore.userInfo?.avatar" />
         </div>
-        <h4>{{ userStore.userInfo?.account }}</h4>
+        <h4>Gty</h4>
       </div>
       <div class="item">
         <a href="javascript:;">
           <span class="iconfont icon-hy"></span>
           <p>会员中心</p>
         </a>
-        <a href="javascript:;">
-          <span class="iconfont icon-aq"></span>
-          <p>安全设置</p>
+        <a href="javascript:;" @click="$router.push('/cartlist')">
+          <span class="iconfont icon-cart"></span>
+          <p>购物车</p>
         </a>
         <a href="javascript:;" @click="showDialog = true">
           <span class="iconfont icon-dw"></span>
