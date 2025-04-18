@@ -8,7 +8,9 @@ import { onMounted } from 'vue'
 import { useCartStore } from '@/store/cartStore'
 const cartStore = useCartStore()
 onMounted(() => {
-  cartStore.getCartList()
+  if (route.path !== '/cartlist') {
+    cartStore.getCartList()
+  }
 })
 // 获取当前页面路径
 import { useRoute } from 'vue-router'
@@ -29,7 +31,6 @@ const cartLoading = () => {
 onMounted(() => {
   if (route.path === '/cartlist') {
     isShowCart.value = false
-    cartStore.getCartList()
     cartLoading()
   } else {
     isShowCart.value = true
@@ -38,7 +39,6 @@ onMounted(() => {
 watch(() => route.path, (newVal) => {
   if (newVal === '/cartlist') {
     isShowCart.value = false
-    cartStore.getCartList()
     cartLoading()
   } else {
     isShowCart.value = true

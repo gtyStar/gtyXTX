@@ -17,7 +17,7 @@ export const useCategory = () => {
       background: 'rgba(0, 0, 0, 0.1)',
     })
     const res = await getTopCategoryAPI(id)
-    categoryData.value = res.result
+    categoryData.value = res?.result
     loading.close()
   }
   // 有个问题，因为路由缓存，所以，当路由参数变化时，不会重新获取数据，两个办法：
