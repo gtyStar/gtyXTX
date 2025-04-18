@@ -71,8 +71,12 @@ const login = () => {
     <header class="login-header">
       <div class="container m-top-20">
         <h1 class="logo">
-          <RouterLink to="/">小兔鲜</RouterLink>
+          <RouterLink to="/">Gty</RouterLink>
         </h1>
+        <div style="position: relative; bottom: 30px; line-height: 30px; font-size: 16px;">
+          <p>账号：<span style="user-select: all;">heima282~293</span></p>
+          <p>密码：<span style="user-select: all;">hm#qd@23!</span></p>
+        </div>
         <RouterLink class="entry" to="/">
           进入网站首页
           <i class="iconfont icon-angle-right"></i>
@@ -90,12 +94,10 @@ const login = () => {
             <el-form ref="formRef" :model="form" :rules="rules" label-position="right" label-width="60px"
               status-icon>
               <el-form-item prop="account"  label="账户">
-                <el-input v-model="form.account" placeholder="请输入用户名或手机号" value="heima282
-"/>
+                <el-input v-model="form.account" placeholder="请输入用户名或手机号"/>
               </el-form-item>
               <el-form-item prop="password" label="密码">
-                <el-input v-model="form.password" placeholder="请输入密码" type="password" value="hm#qd@23!
-"/>
+                <el-input v-model="form.password" placeholder="请输入密码" type="password"/>
               </el-form-item>
               <el-form-item prop="agree" label-width="22px">
                 <el-checkbox v-model="form.agree"  size="large">
@@ -120,7 +122,7 @@ const login = () => {
           <a href="javascript:;">搜索推荐</a>
           <a href="javascript:;">友情链接</a>
         </p>
-        <p>CopyRight &copy; 小兔鲜儿</p>
+        <p>CopyRight &copy; Gty</p>
       </div>
     </footer>
   </div>

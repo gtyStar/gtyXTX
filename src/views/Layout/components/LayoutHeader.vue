@@ -154,7 +154,7 @@ watch(() => route.path, () => {
   <header class='app-header' v-infinite-scroll="scroll">
     <div class="container">
       <h1 class="logo">
-        <RouterLink to="/">小兔鲜</RouterLink>
+        <RouterLink to="/">Gty</RouterLink>
       </h1>
       <ul class="app-header-nav">
         <!-- 渲染头部导航栏 -->

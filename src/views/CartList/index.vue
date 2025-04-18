@@ -2,7 +2,8 @@
 defineOptions({
   name: 'CartList'  // 改为多单词名称
 })
-// import { onMounted } from 'vue'
+import { useUserStore } from '@/store/user'
+const userStore = useUserStore()
 import { useCartStore } from '@/store/cartStore'
 const cartStore = useCartStore()
 // 更新购物车-------------------------------------------------------------------------------
@@ -119,6 +120,7 @@ const buy = () => {
                 <div class="cart-none">
                   <el-empty description="购物车列表为空" style="height: 500px;">
                     <el-button size="large" type="primary" @click="$router.push('/')">随便逛逛</el-button>
+                    <el-button size="large" type="primary" v-if="!userStore.userInfo.token" @click="$router.push('/login')">去登陆</el-button>
                   </el-empty>
                 </div>
               </td>
