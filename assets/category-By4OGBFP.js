@@ -1,0 +1,1 @@
+import{A as o,C as r,n as a}from"./index-BfJbh7OG.js";function n(){return o({url:"home/category/head"})}const c=r("category",()=>{const e=a([]);return{categoryList:e,getCategory:async()=>{const t=await n();e.value=t==null?void 0:t.result}}});export{c as u};
