@@ -81,6 +81,12 @@ watch(() => route.params.id, (newVal) => {
     showGoods.value = true
   }, 500)
 })
+
+// 定义一个下拉获取更多的方法
+const more = async () => {
+  await load()
+  goodsList.value = goodList.value
+}
 </script>
 
 <template>
@@ -101,7 +107,11 @@ watch(() => route.params.id, (newVal) => {
         <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
       </el-tabs>
-      <div class="body" v-infinite-scroll="judge ? load : () => {return}" :infinite-scroll-disabled="disabled" v-if="showGoods">
+      <div class="body"
+      v-infinite-scroll="judge ? more : () => {return}"
+      :infinite-scroll-disabled="disabled"
+      v-if="showGoods"
+      >
         <!-- 商品列表-->
         <GoodsItem v-for="goods in goodsList" :key="goods.id" :goods="goods" />
       </div>
