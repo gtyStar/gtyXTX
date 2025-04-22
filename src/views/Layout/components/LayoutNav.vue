@@ -2,11 +2,14 @@
 // import { ref } from 'vue'
 import { useUserStore } from '@/store/user'
 const userStore = useUserStore()
+import { useSearchStore } from '@/store/search'
+const searchStore = useSearchStore()
 import { useRouter } from 'vue-router'
 const router = useRouter()
 // 退出登录点击确认，清除用户信息并跳转到登录页
 const confirm = () => {
   userStore.clearUserInfo()
+  searchStore.clearSearchHistory()
   router.push('/login')
 }
 </script>

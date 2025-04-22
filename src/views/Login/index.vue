@@ -73,10 +73,10 @@ const login = () => {
         <h1 class="logo">
           <RouterLink to="/">Gty</RouterLink>
         </h1>
-        <div style="position: relative; bottom: 30px; line-height: 30px; font-size: 16px;">
+        <!--<div style="position: relative; bottom: 30px; line-height: 30px; font-size: 16px;">
           <p>账号：<span style="user-select: all;">heima282~293</span></p>
           <p>密码：<span style="user-select: all;">hm#qd@23!</span></p>
-        </div>
+        </div>-->
         <RouterLink class="entry" to="/">
           进入网站首页
           <i class="iconfont icon-angle-right"></i>
