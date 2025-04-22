@@ -67,6 +67,7 @@ const searchThink = ref([]) // 搜索联想
 const loadng = ref(false)   // 联想提示框模拟loading
 // 联想算法
 watch(() => searchModel.value, (newVal) => {
+  searchThink.value = []
   // isShowPlus.value = true
   loadng.value = true
   setTimeout(() => {
