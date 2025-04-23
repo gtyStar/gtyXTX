@@ -26,7 +26,6 @@ onMounted(async () => {
   await getGoods()
   loading.close()
   console.log(goods.value);
-
 })
 
 // 使用watch监听路由参数变化---------------------------------------------------------------------------------
@@ -149,7 +148,7 @@ const addCart = () => {
                 </li>
                 <li>
                   <p>品牌信息</p>
-                  <p>{{ goods.brand.name }}</p>
+                  <p>鲸选自有品牌</p>
                   <p><i class="iconfont icon-dynamic-filling"></i>品牌主页</p>
                 </li>
               </ul>
