@@ -20,8 +20,8 @@ export const useCartStore = defineStore('cart', () => {
   // 清空勾选框---------------------------------------------------------------------------------------
   const clearCheck = () => {
     // 给购物车列表中每一项的 selected 属性值改为 false
-    cartList.value.forEach(item => {
-      item.selected = false
+    cartList.value.forEach(async (item, index) => {
+      await updateCart(item.skuId, false, item.count, index)
     })
     allCheckSelected.value = false
   }
@@ -54,11 +54,12 @@ export const useCartStore = defineStore('cart', () => {
     loading.value = true
     await delCartAPI([skuId])
     getCartList()
+    ElMessage.success('删除成功')
     loading.value = false
   }
   // 修改购物车---------------------------------------------------------------------------------------
-  const updateCart = async (skuId, selected, count) => {
-    cartList.value.find(item => item.skuId === skuId).loading = true
+  const updateCart = async (skuId, selected, count, index) => {
+    cartList.value[index].loading = true
     if (count === 0) {
       ElMessageBox.confirm(
         '你确定要删除该商品名？',
@@ -69,39 +70,41 @@ export const useCartStore = defineStore('cart', () => {
           type: 'warning',
         }
       )
-      .then(async () => {
-        await delCartAPI([skuId])
-        getCartList()
-        ElMessage.success('删除成功')
+      .then(() => {
+        delCart([skuId])
       })
       .catch(() => {
-        getCartList()
+        cartList.value[index].count = 1
       })
     } else {
       await updateCartAPI(skuId, selected, count)
       await getCartList()
     }
-    cartList.value.find(item => item.skuId === skuId).loading = false
+    cartList.value[index].loading = false
   }
 
   // 全选反选那一块---------------------------------------------------------------------------------------
   // 全选框
   const allCheckSelected = ref(false)
   const allCheck = () => {
-    allCheckSelected.value = !allCheckSelected.value
-    cartList.value.forEach(item => {
-      item.selected = allCheckSelected.value
-    })
+    if(allCheckSelected.value) {
+      clearCheck()
+    } else {
+      cartList.value.forEach((item, index) => {
+        updateCart(item.skuId, true, item.count, index)
+      })
+      allCheckSelected.value = true
+    }
   }
   // 监听购物车，如果购物车没东西的话，全选框不选中
   watch(cartList, () => {
     if (cartList.value.length === 0) {
       allCheckSelected.value = false
     }
+    isAllSelected()
   })
   // 当购物车列表中所有商品都选中时，全选框也选中(封装成一个方法)
   const isAllSelected = (() => {
-    console.log(1);
     if (cartList.value.every(item => item.selected === true)) {
       allCheckSelected.value = true
     }else{

@@ -7,8 +7,8 @@ const userStore = useUserStore()
 import { useCartStore } from '@/store/cartStore'
 const cartStore = useCartStore()
 // 更新购物车-------------------------------------------------------------------------------
-const update = (skuId, selected, count) => {
-  cartStore.updateCart(skuId, selected, count)
+const update = (skuId, selected, count, index) => {
+  cartStore.updateCart(skuId, selected, count, index)
 }
 // 删除购物车-------------------------------------------------------------------------------
 const delCart = (item) => {
@@ -16,9 +16,9 @@ const delCart = (item) => {
 }
 // 全选反选那一块-------------------------------------------------------------------------------
 // 单选框
-const singleCheck = (index, selected) => {
-  console.log(index, selected);
+const singleCheck = (index, skuId, selected, count) => {
   cartStore.singleCheck(index)
+  cartStore.updateCart(skuId, selected, count, index)
 }
 // 全选框
 const allCheck = (selected) => {
@@ -48,21 +48,25 @@ const showCheck = ref(false)
 onMounted(async () => {
   showCheck.value = false
   await cartStore.getCartList()
-  cartStore.clearCheck()
-  showCheck.value = true
+  await cartStore.clearCheck()
+  setTimeout(() => {
+    showCheck.value = true
+  }, 1000);
 })
 watch(() => route.path, async () => {
   showCheck.value = false
   await cartStore.getCartList()
-  cartStore.clearCheck()
-  showCheck.value = true
+  await cartStore.clearCheck()
+  setTimeout(() => {
+    showCheck.value = true
+  }, 1000);
 })
 </script>
 
 <template>
   <div class="xtx-cart-page">
     <div class="container m-top-20">
-      <div v-if="cartStore.cartList.length" class="cart">
+      <div v-if="cartStore.cartList.length && userStore.userInfo.token" class="cart">
         <table>
           <thead>
             <tr>
@@ -82,7 +86,7 @@ watch(() => route.path, async () => {
             <tr v-for="(i, index) in cartStore.cartList" :key="i.id">
               <td>
                 <!-- 单选框 -->
-                <el-checkbox v-if="showCheck" :model-value="i.selected" @change="(selected) => singleCheck(index, selected)" />
+                <el-checkbox v-if="showCheck" :model-value="i.selected" @change="(selected) => singleCheck(index, i.skuId, selected, i.count)" />
               </td>
               <td>
                 <div class="goods">
@@ -98,7 +102,7 @@ watch(() => route.path, async () => {
                 <p>&yen;{{ i.price }}</p>
               </td>
               <td class="tc">
-                <el-input-number v-loading="i.loading" :min="0" :max="i.stock" v-model="i.count" @change="update(i.skuId, i.selected, i.count)" />
+                <el-input-number v-loading="i.loading" :min="0" :max="i.stock" v-model="i.count" @change="update(i.skuId, i.selected, i.count, index)" />
               </td>
               <td class="tc">
                 <p class="f16 red">&yen;{{ (i.price * i.count).toFixed(2) }}</p>

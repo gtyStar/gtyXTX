@@ -1,15 +1,17 @@
 <script setup>
 import { useCartStore } from '@/store/cartStore'
 const cartStore = useCartStore()
+import { useUserStore } from '@/store/user'
+const userStore = useUserStore()
 </script>
 
 <template>
   <div class="cart">
     <a class="curr" href="javascript:;">
-      <i class="iconfont icon-cart" ></i><em v-if="cartStore.allCount !== 0">{{ cartStore.allCount }}</em>
+      <i class="iconfont icon-cart" ></i><em v-if="cartStore.allCount !== 0 && userStore.userInfo.token">{{ cartStore.allCount }}</em>
     </a>
     <div class="layer">
-      <div v-if="cartStore.allCount">
+      <div v-if="cartStore.allCount && userStore.userInfo.token">
         <div class="list" v-loading="cartStore.loading">
           <div class="item" v-for="item in cartStore.cartList" :key="item.id">
             <RouterLink :to="`/detail/${item.id}`">
