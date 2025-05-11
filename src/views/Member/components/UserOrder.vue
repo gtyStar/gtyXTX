@@ -31,6 +31,7 @@ const getOrderList = async () => {
     if (item.countdown === -1) {
       item.countdown = '已超时'
     } else {
+      const { formatTime, start } = useCountDown()
       start(item.countdown)
       item.countdown = formatTime
     }
@@ -78,7 +79,6 @@ const creatOrder = (id) => {
 }
 // 未付款的倒计时效果----------------------------------------------------------------------------------------------------
 import { useCountDown } from '@/composables/useCountDown'
-const { formatTime, start } = useCountDown()
 
 
 </script>

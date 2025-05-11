@@ -12,6 +12,87 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 // import Member from '@/views/Member/index.vue'
 // import MemberInfo from '@/views/Member/components/UserInfo.vue'
 // import MemberOrder from '@/views/Member/components/UserOrder.vue'
+// const router = createRouter({
+//   history: createWebHashHistory(import.meta.env.BASE_URL),
+//   // path和 component对应关系的位置
+//   routes: [
+//     {
+//       path: '/',
+//       component: Layout,
+//       children: [
+//         {
+//           path: '',
+//           name: 'home',
+//           component: Home,
+//         },
+//         {
+//           path: 'category/:id',
+//           component: Category,
+//         },
+//         {
+//           path: 'category/sub/:id',
+//           component: SubCategory,
+//         },
+//         {
+//           path: 'detail/:id',
+//           component: Detail,
+//         },
+//         {
+//           path: 'cartlist',
+//           component: CartList,
+//           meta: { tip: true },
+//         },
+//         {
+//           path: 'checkout',
+//           component: Checkout,
+//           meta: { login: true },
+//         },
+//         {
+//           path: 'pay',
+//           component: Pay,
+//           meta: { login: true },
+//         },
+//         {
+//           path: 'paycallback',
+//           component: PayBack,
+//           meta: { login: true },
+//         },
+//         {
+//           path: 'member',
+//           component: Member,
+//           meta: { tip: true },
+//           children: [
+//             {
+//               path: '',
+//               component: MemberInfo,
+//             },
+//             {
+//               path: 'order',
+//               component: MemberOrder,
+//             }
+//           ]
+//         }
+//       ],
+//     },
+//     {
+//       path: '/login',
+//       name: 'login',
+//       component: Login,
+//     },
+//     // 如果是不存在的路径，重定向到首页
+//     {
+//       path: '/:pathMatch(.*)*',
+//       redirect: '/?statu=404',
+//       meta: { is404: true },
+//     }
+//   ],
+//   // 路由跳转的时候，滚动条会自动回到顶部
+//   scrollBehavior() {
+//     return {
+//       top: 0,
+//     }
+//   }
+// })
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
